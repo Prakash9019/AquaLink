@@ -26,6 +26,23 @@ const SignIn = () => {
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
+    const handleSubmit1 = async (e) => {
+        e.preventDefault();
+        const {Uid,username,email,password} = sign;
+        const response = await fetch("http://localhost:5000/api/auth/user", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Uid,username,email,password})
+        });
+        const json = await response.json()
+        console.log(json);
+            // Save the auth token and redirect
+            localStorage.setItem('jwtData', json.jwtData); 
+            console.log(json.jwtData);
+           // navigate("/");
+    }
 
     const textInputChange = (val) => {
         if( val.length !== 0 ) {
@@ -201,7 +218,7 @@ const SignIn = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.goBack()}
+                    onPress={handleSubmit1}
                     style={[styles.signIn, {
                         borderColor: '#FF6347',
                         borderWidth: 1,

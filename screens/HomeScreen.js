@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/native';
 
 const HomeScreen = () => {
   const [email, setEmail] = useState('');
@@ -61,7 +61,8 @@ const HomeScreen = () => {
           onChangeText={setConfirmPassword}
         />
       </View>
-      <TouchableOpacity style={styles.signupBtn}  onPress={() => navigation.navigate('MainScreen')}>
+      {/* onPress={handleSignup} */}
+      <TouchableOpacity style={styles.signupBtn}  onPress={navigation.navigate("MainScreen")}>
         <Text style={styles.signupText}>SIGN UP</Text>
       </TouchableOpacity>
     </View>
