@@ -12,6 +12,7 @@ import HomeScreen from './screens/HomeScreen';
 import Signup from './screens/Login';
 import SignIn from './screens/Register';
 import MainScreen from './screens/Main';
+import MapScreen from './components/MapScreen';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -22,6 +23,14 @@ export default function App() {
           <TailwindProvider>
            
               <Stack.Navigator>
+              <Stack.Screen
+                  name="MapScreen"
+                  component={MapScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                
               <Stack.Screen
                   name="HomeScreen"
                   component={HomeScreen}
@@ -50,6 +59,7 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
+                
               </Stack.Navigator>
           </TailwindProvider>
         </SafeAreaProvider>
