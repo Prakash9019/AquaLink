@@ -1,116 +1,116 @@
-import React from 'react';
-import { 
-    View, 
-    Text, 
-    TouchableOpacity, 
-    Dimensions,
-    StyleSheet,
-    StatusBar,
-    Image
-} from 'react-native';
-import * as Animatable from 'react-native-animatable';
-//mport LinearGradient from 'react-native-linear-gradient';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { useTheme } from '@react-navigation/native';
+
+import React, { useState} from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const MainScreen = () => {
-    const { colors } = useTheme();
-    const navigation=useNavigation();
-    return (
-      <View style={styles.container}>
-          <StatusBar backgroundColor='#FF6347' barStyle="light-content"/>
-        <View style={styles.header}>
-            <Animatable.Image 
-                animation="bounceIn"
-                duraton="1500"
-                source={require('../components/flood.png')}
-            style={styles.logo}
-            resizeMode="stretch"
-            />
-        </View>
-        <Animatable.View 
-            style={[styles.footer, {
-                backgroundColor: colors.background
-            }]}
-            animation="fadeInUpBig"
-        >
-            <Text style={[styles.title, {
-                color: colors.text
-            }]}>Welcome to AquaLink</Text>
-            <Text style={styles.text} onPress={()=>{navigation.navigate('SignIn')}}> Sign in with account</Text>
-            <Text style={styles.text} onPress={()=>{navigation.navigate('Signup')}} > Login </Text>
-            <View style={styles.button}>
-          
-                <TouchableOpacity
-                    onPress={()=>{navigation.navigate('SignIn')}}
-                    colors={['#FFA07A', '#FF6347']}
-                    style={styles.signIn}
-                >
-                    <Text style={styles.textSign}>Get Started</Text>
-                    <MaterialIcons 
-                        name="navigate-next"
-                        color="#fff"
-                        size={20}
-                    />
-                </TouchableOpacity>
-           
-            </View>
-        </Animatable.View>
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [credentials, setCredentials] = useState({email: "", password: ""}) 
+    let navigation = useNavigation();
+
+    const [sign, setSign] = useState({Uid:"",username:"" ,email: "", password: ""}) 
+    const handleSubmit1 = async (e) => {
+        e.preventDefault();
+        const {Uid,username,email,password} = sign;
+        const response = await fetch("http://localhost:5000/api/auth/user", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({Uid,username,email,password})
+        });
+        const json = await response.json()
+        console.log(json);
+            // Save the auth token and redirect
+            localStorage.setItem('jwtData', json.jwtData); 
+            console.log(json.jwtData);
+           // navigate("/");
+    }
+  const handleSignup = () => {
+    // Add your signup logic here
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.logo}>Sign Up</Text>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Email..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setEmail}
+        />
       </View>
-    );
+      <View style={styles.inputView}>
+        <TextInput
+          secureTextEntry
+          style={styles.inputText}
+          placeholder="Password..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setPassword}
+        />
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          secureTextEntry
+          style={styles.inputText}
+          placeholder="Confirm Password..."
+          placeholderTextColor="#003f5c"
+          onChangeText={setConfirmPassword}
+        />
+      </View>
+      {/* onPress={handleSignup} */}
+      <TouchableOpacity style={styles.signupBtn}  onPress={navigation.navigate("MainScreen")}>
+        <Text style={styles.signupText}>SIGN UP</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
-
-export default MainScreen;
-
-const {height} = Dimensions.get("screen");
-const height_logo = height * 0.28;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: '#FF6347'
-  },
-  header: {
-      flex: 2,
-      justifyContent: 'center',
-      alignItems: 'center'
-  },
-  footer: {
-      flex: 1,
-      backgroundColor: '#fff',
-      borderTopLeftRadius: 30,
-      borderTopRightRadius: 30,
-      paddingVertical: 50,
-      paddingHorizontal: 30
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#003f5c',
   },
   logo: {
-      width: height_logo,
-      height: height_logo
+    fontWeight: 'bold',
+    fontSize: 30,
+    color: '#fb5b5a',
+    marginBottom: 20,
   },
-  title: {
-      color: '#05375a',
-      fontSize: 30,
-      fontWeight: 'bold'
+  inputView: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 25,
+    height: 50,
+    marginBottom: 20,
+    justifyContent: 'center',
+    padding: 20,
   },
-  text: {
-      color: 'grey',
-      marginTop:5
+  inputText: {
+    height: 50,
+    color: 'black',
+    fontSize:20,
+    borderRadius:8,
   },
-  button: {
-      alignItems: 'flex-end',
-      marginTop: 30
+  signupBtn: {
+    width: '80%',
+    backgroundColor: '#fb5b5a',
+    borderRadius: 25,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 40,
+    marginBottom: 10,
   },
-  signIn: {
-      width: 150,
-      height: 40,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50,
-      flexDirection: 'row'
+  signupText: {
+    color: 'white',
   },
-  textSign: {
-      color: 'black',
-      fontWeight: 'bold'
-  }
 });
+
+export default MainScreen;

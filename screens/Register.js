@@ -12,11 +12,14 @@ import {
     StatusBar
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
+import { useNavigation } from '@react-navigation/native';
 //import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
 const SignIn = () => {
+
+    const navigation=useNavigation();
 
     const [data, setData] = React.useState({
         username: '',
@@ -218,7 +221,7 @@ const SignIn = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={handleSubmit1}
+                    onPress={()=>{navigation.navigate('MapScreen')}}
                     style={[styles.signIn, {
                         borderColor: '#FF6347',
                         borderWidth: 1,

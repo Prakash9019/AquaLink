@@ -13,6 +13,8 @@ import Signup from './screens/Login';
 import SignIn from './screens/Register';
 import MainScreen from './screens/Main';
 import MapScreen from './components/MapScreen';
+import Footer from './components/Footer';
+import MapComponent from './screens/Example';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -24,8 +26,15 @@ export default function App() {
            
               <Stack.Navigator>
               <Stack.Screen
-                  name="MapScreen"
-                  component={MapScreen}
+                  name="mapp"
+                  component={MapComponent}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              <Stack.Screen
+                  name="Footer"
+                  component={Footer}
                   options={{
                     headerShown: false,
                   }}
@@ -38,13 +47,7 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-                <Stack.Screen
-                  name="MainScreen"
-                  component={MainScreen}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
+                
                 <Stack.Screen
                   name="SignIn"
                   component={SignIn}
@@ -55,6 +58,13 @@ export default function App() {
                 <Stack.Screen
                   name="Signup"
                   component={Signup}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="MapScreen"
+                  component={MapScreen}
                   options={{
                     headerShown: false,
                   }}

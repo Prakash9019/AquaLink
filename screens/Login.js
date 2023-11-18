@@ -222,7 +222,7 @@ const Signup = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('SignUpScreen')}
+                    onPress={() => navigation.navigate('MapScreen')}
                     style={[styles.signIn, {
                         borderColor: '#FF6347',
                         borderWidth: 1,
