@@ -13,6 +13,7 @@ router.post('/user',[
     body('email').isEmail(),
     body('password').isLength({min:3})
 ],async (req,res)=>{
+  console.log(req);
      const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send("please try to login with error box...");
@@ -50,8 +51,8 @@ router.post('/user',[
 
 //for login
 router.post('/login',[
-  body('email','enter a correct email').isEmail(),
-  body('password','password cnt blank').exists(),
+  body('email','Enter a Correct Email').isEmail(),
+  body('password','Password cnt blank').exists(),
 ],async (req,res)=>{
   let sucess=false;
   //check for possible errors 
@@ -72,15 +73,19 @@ router.post('/login',[
     sucess=false;
     return res.status(400).send("please try to login with correct credentials");
   }
-   const data={
-    user:{
-      id:user.id
-    }
-   }
-
-   const jwtData=jwt.sign(data,jwt_s);
-   sucess=true;
-   res.json({sucess,jwtData});
+  else{
+    const data={
+      user:{
+        id:user.id
+      }
+     }
+  
+     const jwtData=jwt.sign(data,jwt_s);
+     sucess=true;
+     res.json({sucess,jwtData});
+  }
+   
+   
 
 }
 catch(error){

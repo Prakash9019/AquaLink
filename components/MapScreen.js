@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect ,useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Modal,
+  Button,
 } from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 
@@ -62,6 +64,44 @@ const MapScreen = () => {
   };
 
   const [state, setState] = React.useState(initialMapState);
+  const [mark, setmark] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedMarker, setSelectedMarker] = useState(null);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
+  const handleMapPress = (event) => {
+    setModalVisible(true);
+    setSelectedMarker(null);
+    setTitle('');
+    setDescription('');
+    setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
+  };
+
+  const handleMarkerPress = (marker) => {
+    setModalVisible(true);
+    setSelectedMarker(marker);
+    setTitle(marker.title);
+    setDescription(marker.description);
+  };
+
+  const handleSave = () => {
+    console.log(mark.coordinate);
+    if (selectedMarker) {
+      // Update existing marker
+      const updatedmark = mark.map((marker) =>
+        marker === selectedMarker
+          ? { ...marker, title, description }
+          : marker
+      );
+      setmark(updatedmark);
+    } else {
+      // Add new marker
+      setmark([...mark, { coordinate: selectedMarker.coordinate, title, description }]);
+    }
+
+    setModalVisible(false);
+  };
 
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
@@ -132,6 +172,7 @@ const MapScreen = () => {
         initialRegion={state.region}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
+        onPress={handleMapPress}
         customMapStyle={theme.dark ? mapDarkStyle : mapStandardStyle}
       >
         {state.markers.map((marker, index) => {
@@ -157,7 +198,48 @@ const MapScreen = () => {
             </Marker>
           );
         })}
+        {mark.map((marker, index) => (
+          <Marker
+            key={index}
+            coordinate={marker.coordinate}
+            title={marker.title}
+            description={marker.description}
+            onPress={() => handleMarkerPress(marker)}
+          />
+        ))}
       </MapView>
+      <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        style={styles.task}
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+         <View style={styles.centeredView}>
+        <View style={styles.modalContainer}>
+          <Text>Title:</Text>
+          <TextInput
+            style={styles.input}
+            value={title}
+            onChangeText={(text) => setTitle(text)}
+          />
+
+          <Text>Description:</Text>
+          <TextInput
+            style={styles.input}
+            value={description}
+            onChangeText={(text) => setDescription(text)}
+          />
+        <View style={styles.Button}>
+          <Button title="Save" onPress={handleSave}  /> 
+        </View>
+          <Button title="Cancel" onPress={() => setModalVisible(false)}   />
+       
+        </View>
+        </View>
+      </Modal>
+      </View>
       <View style={styles.searchBox}>
         <TextInput 
           placeholder="Search here"
@@ -190,6 +272,7 @@ const MapScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
+      
       <Animated.ScrollView
         ref={_scrollView}
         horizontal
@@ -232,23 +315,12 @@ const MapScreen = () => {
               <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
               <StarRating ratings={marker.rating} reviews={marker.reviews} />
               <Text numberOfLines={1} style={styles.cardDescription}>{marker.description}</Text>
-              <View style={styles.button}>
-                <TouchableOpacity
-                  onPress={() => {}}
-                  style={[styles.signIn, {
-                    borderColor: '#FF6347',
-                    borderWidth: 1
-                  }]}
-                >
-                  <Text style={[styles.textSign, {
-                    color: '#FF6347'
-                  }]}>Order Now</Text>
-                </TouchableOpacity>
-              </View>
+              
             </View>
           </View>
         ))}
       </Animated.ScrollView>
+      
     </View>
   );
 };
@@ -256,8 +328,43 @@ const MapScreen = () => {
 export default MapScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  Button:{
+    marginBottom: 20,
+    marginTop:23,
+  
+    backgroundColor:'gray'
+  },
+  centeredView: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '20%',
+    marginBottom:'50%',
+    marginRight:'10%',
+    marginLeft:'10%',
+    backgroundColor:'skyblue',
+
+  },
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    flex:1,
+    alignItems: 'center',
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 45,
+    margin:25,
+  },
+  input: {
+    height: 40,
+    width:200,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10,
   },
   searchBox: {
     position:'absolute', 

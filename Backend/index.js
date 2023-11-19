@@ -6,6 +6,13 @@ var cors=require('cors');
 const app = express();
 const PORT=5000;
 connectDB();
+// app.use(cors(
+//     {
+//         origin:["https://notes-application-front-htzqbfgbg.vercel.app"],
+//         methods:["POST","GET"],
+//         credentials:true
+//     }
+// ));
 app.use(cors());
 app.use(express.json());
 
@@ -13,11 +20,11 @@ app.use(express.json());
 app.use('/api/auth',require('./routers/auth.js'));
 app.use('/api/notes',require('./routers/notes'));
 
-
 app.get('/',(req,res)=>{
-    res.send("hello surya");
+    res.json("hello");
 })
 
+
 app.listen(PORT, () => {
-    console.log(`inoteBook listening at http://localhost:${PORT}`);
+    console.log(`Todolist listening at http://localhost:${PORT}`);
 })

@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Modal, TextInput, Button } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 
 const MapComponent = () => {
-  const [markers, setMarkers] = useState([]);
+  const [mark, setmark] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
@@ -15,7 +15,7 @@ const MapComponent = () => {
     setSelectedMarker(null);
     setTitle('');
     setDescription('');
-    setMarkers([...markers, { coordinate: event.nativeEvent.coordinate }]);
+    setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
   };
 
   const handleMarkerPress = (marker) => {
@@ -26,18 +26,18 @@ const MapComponent = () => {
   };
 
   const handleSave = () => {
-    console.log(markers.coordinate);
+    console.log(mark.coordinate);
     if (selectedMarker) {
       // Update existing marker
-      const updatedMarkers = markers.map((marker) =>
+      const updatedmark = mark.map((marker) =>
         marker === selectedMarker
           ? { ...marker, title, description }
           : marker
       );
-      setMarkers(updatedMarkers);
+      setmark(updatedmark);
     } else {
       // Add new marker
-      setMarkers([...markers, { coordinate: selectedMarker.coordinate, title, description }]);
+      setmark([...mark, { coordinate: selectedMarker.coordinate, title, description }]);
     }
 
     setModalVisible(false);
@@ -49,7 +49,7 @@ const MapComponent = () => {
         style={styles.map}
         onPress={handleMapPress}
       >
-        {markers.map((marker, index) => (
+        {mark.map((marker, index) => (
           <Marker
             key={index}
             coordinate={marker.coordinate}

@@ -25,13 +25,20 @@ export default function App() {
           <TailwindProvider>
            
               <Stack.Navigator>
+              {/* <Stack.Screen
+                  name="MapScreen"
+                  component={MapScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
               <Stack.Screen
                   name="mapp"
                   component={MapComponent}
                   options={{
                     headerShown: false,
                   }}
-                />
+                /> */}
               <Stack.Screen
                   name="Footer"
                   component={Footer}
@@ -58,13 +65,6 @@ export default function App() {
                 <Stack.Screen
                   name="Signup"
                   component={Signup}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="MapScreen"
-                  component={MapScreen}
                   options={{
                     headerShown: false,
                   }}

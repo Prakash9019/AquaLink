@@ -16,6 +16,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 
 import { useTheme } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //import { AuthContext } from '../components/context';
 
@@ -91,6 +92,33 @@ const Signup = () => {
             });
         }
     }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await fetch("https://notes-application-api-pi.vercel.app/api/auth/login", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({email: data.username, password: data.password})
+        });
+        const json = await response.json();
+     //   console.log(json);
+      //  console.log(json.sucess);
+        if (json.sucess){
+            
+            // Save the auth token and redirect
+            AsyncStorage.setItem('jwtData', json.jwtData); 
+            console.log(json.jwtData);
+            navigation.navigate("MapScreen");
+
+        }
+        else{
+           // console.log(response);
+            toast(json.errors[0].msg);
+            
+        }
+    }
+
 
     const loginHandle = (userName, password) => {
 
@@ -216,13 +244,13 @@ const Signup = () => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => {loginHandle( data.username, data.password )}}
+                    onPress={() => {handleSubmit}}
                 >
                
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('MapScreen')}
+                    onPress={handleSubmit}
                     style={[styles.signIn, {
                         borderColor: '#FF6347',
                         borderWidth: 1,

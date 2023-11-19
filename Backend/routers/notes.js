@@ -7,7 +7,7 @@ const { findByIdAndUpdate } = require('../note.js');
 
 router.get('/fetchall', fetchuser,  async (req, res) => {
     try {
-      const notes = await Note.find({user : req.user.id});
+      const notes = await Note.find({id : req.Uid});
       res.json(notes);
     } catch (error) {
       console.error(error.message);
@@ -21,7 +21,7 @@ router.post('/addnote', fetchuser, [
   body('description', 'Description must be atleast 5 characters').isLength({ min: 5 }),], async (req, res) => {
       try {
         // using destructing method of javascript for send the requested data to corresponding fields
-          const { title, description, tag } = req.body;
+          const { title, description} = req.body;
 
           // If there are errors, return Bad request and the errors
           const errors = validationResult(req);
@@ -31,7 +31,7 @@ router.post('/addnote', fetchuser, [
           //created a new note with "new" keyword
           //new note object  contain title...
           const note = new Note({
-              title, description, tag, user: req.user.id
+               title, description, user: req.user.id
           })
           //saving the notes 
           const savedNote = await note.save()
@@ -48,20 +48,21 @@ router.post('/addnote', fetchuser, [
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
   //The PUT method is used to modify a single resource. The POST method is used to add a child resource
   // same PUT request multiple times will always produce the same result 
-  const { title, description, tag } = req.body;
+
+  const {title, description } = req.body;
   try {
       // Create a newNote object
       const newNote = {};
+     
       if (title) { newNote.title = title };
       if (description) { newNote.description = description };
-      if (tag) { newNote.tag = tag };
-
       // Find the note to be updated and update it
       //getting the notes by findById method...
       let note = await Note.findById(req.params.id);
+      console.log(note._id);
       if (!note) { return res.status(404).send("Not Found") }
-
-      //matching the existing user id with the login id
+      //matching the existing user id with the login id9
+    //  console.log(note.Uid + "   " +Uid);
       if (note.user.toString() !== req.user.id) {     // checks whether the user login in is using his notes or other 
           return res.status(401).send("Not Allowed");
       }

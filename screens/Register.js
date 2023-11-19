@@ -9,7 +9,8 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    StatusBar
+    StatusBar,
+    AsyncStorage
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
@@ -24,26 +25,28 @@ const SignIn = () => {
     const [data, setData] = React.useState({
         username: '',
         password: '',
-        confirm_password: '',
+        email: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
     const handleSubmit1 = async (e) => {
         e.preventDefault();
-        const {Uid,username,email,password} = sign;
-        const response = await fetch("http://localhost:5000/api/auth/user", {
+        console.log(data);
+        const {username,password,email} = data;
+        const response = await fetch("https://notes-application-api-pi.vercel.app/api/auth/user", {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+              "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json'
             },
-            body: JSON.stringify({Uid,username,email,password})
+            body: JSON.stringify({username,email,password})
         });
+        console.log(response);
         const json = await response.json()
-        console.log(json);
-            // Save the auth token and redirect
-            localStorage.setItem('jwtData', json.jwtData); 
-            console.log(json.jwtData);
+        await AsyncStorage.setItem('jwtData', json.jwtData);
+         console.log(json.jwtData);
+         navigation.navigate('MapScreen');
            // navigate("/");
     }
 
@@ -73,7 +76,7 @@ const SignIn = () => {
     const handleConfirmPasswordChange = (val) => {
         setData({
             ...data,
-            confirm_password: val
+            email: val
         });
     }
 
@@ -174,10 +177,10 @@ const SignIn = () => {
                 />
                 <TextInput 
                     placeholder="Confirm Your Password"
-                    secureTextEntry={data.confirm_secureTextEntry ? true : false}
+                //    secureTextEntry={data.confirm_secureTextEntry ? true : false}
                     style={styles.textInput}
                     autoCapitalize="none"
-                    onChangeText={(val) => handleConfirmPasswordChange(val)}
+                     onChangeText={(val) => handleConfirmPasswordChange(val)}
                 />
                 <TouchableOpacity
                     onPress={updateConfirmSecureTextEntry}
@@ -208,7 +211,7 @@ const SignIn = () => {
             <View style={styles.button}>
                 <TouchableOpacity
                     style={styles.signIn}
-                    onPress={() => {}}
+                    onPress={handleSubmit1}
                 >
                 <TouchableOpacity
                     colors={['#FFA07A', '#FF6347']}
@@ -221,7 +224,7 @@ const SignIn = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={()=>{navigation.navigate('MapScreen')}}
+                    onPress={handleSubmit1}
                     style={[styles.signIn, {
                         borderColor: '#FF6347',
                         borderWidth: 1,
