@@ -11,10 +11,9 @@ import {
   Dimensions,
   Platform,
   Modal,
-  Button,
 } from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
-
+import { Dialog, Button } from "react-native-paper"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -69,15 +68,18 @@ const MapScreen = () => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [image,setImage]=useState('');
 
   const handleMapPress = (event) => {
-    setModalVisible(true);
+  //  setModalVisible(true);               check this out
     setSelectedMarker(null);
     setTitle('');
     setDescription('');
     setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
   };
-
+  const hideDialog = () => {
+    setModalVisible(!modalVisible)
+}
   const handleMarkerPress = (marker) => {
     setModalVisible(true);
     setSelectedMarker(marker);
@@ -91,7 +93,7 @@ const MapScreen = () => {
       // Update existing marker
       const updatedmark = mark.map((marker) =>
         marker === selectedMarker
-          ? { ...marker, title, description }
+          ? { ...marker, title, description,image }
           : marker
       );
       setmark(updatedmark);
@@ -102,7 +104,7 @@ const MapScreen = () => {
 
     setModalVisible(false);
   };
-
+   
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
 
@@ -208,7 +210,7 @@ const MapScreen = () => {
           />
         ))}
       </MapView>
-      <View style={styles.centeredView}>
+      {/* <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         style={styles.task}
@@ -231,6 +233,10 @@ const MapScreen = () => {
             value={description}
             onChangeText={(text) => setDescription(text)}
           />
+           <TouchableOpacity onPress={handleImage}>
+                    <Text style={{ color: "#900", margin: 20 }}>Add Image</Text>
+                </TouchableOpacity>
+
         <View style={styles.Button}>
           <Button title="Save" onPress={handleSave}  /> 
         </View>
@@ -239,7 +245,38 @@ const MapScreen = () => {
         </View>
         </View>
       </Modal>
-      </View>
+      </View> */}
+       <Dialog visible={setModalVisible} onDismiss={hideDialog} >
+                <Dialog.Title>ADD A TASK</Dialog.Title>
+                <Dialog.Content>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Title"
+                        value={title}
+                        onChangeText={(text) => setTitle(text)}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Description"
+                        value={description}
+                        onChangeText={(text) => setDescription(text)}
+                    />
+                     <TouchableOpacity onPress={()=>{navigation.navigate('CameraComponent')}}>
+                    <Text style={{ color: "#900", margin: 20 }}>Add Image</Text>
+                     </TouchableOpacity>
+                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                        <TouchableOpacity onPress={hideDialog} >
+                            <Text>CANCEL</Text>
+                        </TouchableOpacity>
+                        <Button
+                            onPress={handleSave}
+                            disabled={!title || !description || loading}
+                        >
+                            ADD
+                        </Button>
+                    </View>
+                </Dialog.Content>
+            </Dialog>
       <View style={styles.searchBox}>
         <TextInput 
           placeholder="Search here"

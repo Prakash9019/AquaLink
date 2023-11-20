@@ -10,8 +10,8 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
-    AsyncStorage
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 //import LinearGradient from 'react-native-linear-gradient';
@@ -32,22 +32,25 @@ const SignIn = () => {
     });
     const handleSubmit1 = async (e) => {
         e.preventDefault();
-        console.log(data);
-        const {username,password,email} = data;
-        const response = await fetch("https://notes-application-api-pi.vercel.app/api/auth/user", {
-            method: 'POST',
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username,email,password})
-        });
-        console.log(response);
-        const json = await response.json()
-        await AsyncStorage.setItem('jwtData', json.jwtData);
-         console.log(json.jwtData);
-         navigation.navigate('MapScreen');
-           // navigate("/");
+        try {
+            const response = await axios.post('https://notes-application-api-pi.vercel.app/api/auth/user', {
+                username:data.username,
+              email: data.email,
+              password: data.password,
+            });
+      
+            const json = response.data;
+            console.log(json);
+            // Save the token to AsyncStorage
+            await AsyncStorage.setItem('jwtData', json.jwtData);
+      
+            // Navigate to the next screen or perform other actions
+            console.log('Token saved:', json.jwtData);
+            navigation.navigate("MapScreen");
+          } catch (error) {
+            console.error('Error during login:', error.message);
+           Alert.alert('Error', 'Login failed');
+          }
     }
 
     const textInputChange = (val) => {
@@ -65,6 +68,22 @@ const SignIn = () => {
             });
         }
     }
+   //emailInputChange
+   const emailInputChange = (val) => {
+    if( val.length !== 0 ) {
+        setData({
+            ...data,
+            email: val,
+            check_textInputChange: true
+        });
+    } else {
+        setData({
+            ...data,
+            email: val,
+            check_textInputChange: false
+        });
+    }
+}
 
     const handlePasswordChange = (val) => {
         setData({
@@ -117,6 +136,32 @@ const SignIn = () => {
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={(val) => textInputChange(val)}
+                />
+                {data.check_textInputChange ? 
+                <Animatable.View
+                    animation="bounceIn"
+                >
+                    <Feather 
+                        name="check-circle"
+                        color="green"
+                        size={20}
+                    />
+                </Animatable.View>
+                : null}
+            </View>
+
+            <Text style={styles.text_footer}>Email</Text>
+            <View style={styles.action}>
+                <FontAwesome 
+                    name="user-o"
+                    color="#05375a"
+                    size={20}
+                />
+                <TextInput 
+                    placeholder="Your Email"
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                    onChangeText={(val) => emailInputChange(val)}
                 />
                 {data.check_textInputChange ? 
                 <Animatable.View

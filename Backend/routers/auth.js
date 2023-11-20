@@ -10,7 +10,7 @@ const jwt_s="surya";
 // user register
 router.post('/user',[
     body('username').isLength({min:3}),
-    body('email').isEmail(),
+    body('email').isLength({min:3}),
     body('password').isLength({min:3})
 ],async (req,res)=>{
   console.log(req);
@@ -24,7 +24,7 @@ router.post('/user',[
     if(user){
       return res.status(400).send("please try to login user error...");
     }
-
+    console.log(user);
     const salt=await bcrypt.genSalt(10);
     const secPass=await bcrypt.hash(req.body.password,salt);
    

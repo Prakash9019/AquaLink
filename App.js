@@ -12,6 +12,7 @@ import HomeScreen from './screens/HomeScreen';
 import Signup from './screens/Login';
 import SignIn from './screens/Register';
 import MainScreen from './screens/Main';
+import CameraComponent from './screens/Camera';
 import MapScreen from './components/MapScreen';
 import Footer from './components/Footer';
 import MapComponent from './screens/Example';
@@ -25,27 +26,8 @@ export default function App() {
           <TailwindProvider>
            
               <Stack.Navigator>
-              {/* <Stack.Screen
-                  name="MapScreen"
-                  component={MapScreen}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-              <Stack.Screen
-                  name="mapp"
-                  component={MapComponent}
-                  options={{
-                    headerShown: false,
-                  }}
-                /> */}
-              <Stack.Screen
-                  name="Footer"
-                  component={Footer}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
+              
+             
                 
               <Stack.Screen
                   name="HomeScreen"
@@ -65,6 +47,34 @@ export default function App() {
                 <Stack.Screen
                   name="Signup"
                   component={Signup}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                 <Stack.Screen
+                  name="Footer"
+                  component={Footer}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="MapScreen"
+                  component={MapScreen}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                <Stack.Screen
+                  name="CameraComponent"
+                  component={CameraComponent}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              <Stack.Screen
+                  name="mapp"
+                  component={MapComponent}
                   options={{
                     headerShown: false,
                   }}

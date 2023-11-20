@@ -36,6 +36,18 @@ const userSchema= new Schema({
 });
 
 
+//from medical.js
+// user:{
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'User'             // works as foriegn key for the user.js file
+// },
+// name: String,
+// img:
+// {
+//     data: Buffer,
+//     contentType: String
+// }
+
 // coordinate: {
 //     latitude: 22.6345648,
 //     longitude: 88.4377279,
