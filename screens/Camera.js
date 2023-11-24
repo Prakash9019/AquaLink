@@ -3,12 +3,13 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'expo-camera';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import * as ImagePicker from "expo-image-picker"
+import { useNavigation } from '@react-navigation/native';
 
-const CameraComponent = ({ navigation, route }) => {
+const CameraComponent = ({ route }) => {
     const [hasPermission, setHasPermission] = useState(null);
     const [type, setType] = useState(CameraType.back);
     const [camera, setCamera] = useState(null);
-
+   const navigation=useNavigation();
 
 
 
@@ -30,15 +31,30 @@ const CameraComponent = ({ navigation, route }) => {
         const data = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true, aspect: [1, 1], quality: 1
         });
-        if (route.params.updateProfile) return navigation.navigate("profile", { image: data.uri })
-        else return navigation.navigate("register", { image: data.uri })
+     //   console.log("data" +data.assets[0].uri);
+        if (route.params.img) return navigation.navigate("MapScreen", { image: data.assets[0].uri })
+        else return navigation.navigate("MapScreen", { image: data.assets[0].uri })
     }
 
     const clickPicture = async () => {
 
         const data = await camera.takePictureAsync();
-        if (route.params.updateProfile) return navigation.navigate("profile", { image: data.uri })
-        else return navigation.navigate("register", { image: data.uri })
+        // console.log(data);
+        // console.log(route.params.img);
+        if (route.params.img) return navigation.navigate("MapScreen", { image: data.uri })
+        else return navigation.navigate("MapScreen", { image: data.uri })
+        //in repo their used
+
+      //  Profile = ({ navigation, route }) 
+
+        // useEffect(() => {
+    //     if (route.params) {
+    //         if (route.params.image) {
+    //             setAvatar(route.params.image)
+    //         }
+    //     }
+
+    // }, [route])
 
     }
 

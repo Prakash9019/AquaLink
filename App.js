@@ -29,7 +29,7 @@ export default function App() {
               
              
                 
-              <Stack.Screen
+              {/* <Stack.Screen
                   name="HomeScreen"
                   component={HomeScreen}
                   options={{
@@ -50,7 +50,7 @@ export default function App() {
                   options={{
                     headerShown: false,
                   }}
-                />
+                /> */}
                  <Stack.Screen
                   name="Footer"
                   component={Footer}

@@ -4,6 +4,10 @@ const Images = [
     { image: require("./flood.png") },
 ];
 const userSchema= new Schema({
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'             // works as foriegn key for the user.js file
+    },
     coordinate:{
         latitude:{
             type:Number,
@@ -25,12 +29,15 @@ const userSchema= new Schema({
     },
     image:{
         type:Images[0].image,
+        default:""
     },
     rating:{
         type:Number,
+        default:0
     },
     review:{
         type:Number,
+        default:0
     },
     
 });

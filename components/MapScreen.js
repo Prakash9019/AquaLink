@@ -1,4 +1,5 @@
-import React, { useEffect ,useState} from 'react';
+import React, { useEffect ,useState,memo } from 'react';
+import Dialog from 'react-native-dialog';
 import {
   StyleSheet,
   Text,
@@ -6,29 +7,34 @@ import {
   View,
   ScrollView,
   Animated,
+  Keyboard,
+  Pressable,
   Image,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
   Dimensions,
   Platform,
   Modal,
 } from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
-import { Dialog, Button } from "react-native-paper"
+import {  Button } from "react-native-paper"
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import { markers, mapDarkStyle, mapStandardStyle } from '../models/mapData';
 import StarRating from "../Functions/StarRating"
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
-const MapScreen = () => {
+const MapScreen = ({route}) => {
   const theme = useTheme();
+  const navigation=useNavigation();
 
   const initialMapState = {
     markers,
@@ -63,42 +69,68 @@ const MapScreen = () => {
   };
 
   const [state, setState] = React.useState(initialMapState);
-  const [mark, setmark] = useState([]);
+  
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [image,setImage]=useState('');
+  const [mark, setmark] = useState([]);
 
   const handleMapPress = (event) => {
-  //  setModalVisible(true);               check this out
+   // setModalVisible(true);            //   check this out
     setSelectedMarker(null);
     setTitle('');
     setDescription('');
+    setImage('');
     setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
+    
   };
-  const hideDialog = () => {
-    setModalVisible(!modalVisible)
-}
+//   const hideDialog = () => {
+//     setModalVisible(!modalVisible)
+// }
   const handleMarkerPress = (marker) => {
     setModalVisible(true);
     setSelectedMarker(marker);
     setTitle(marker.title);
     setDescription(marker.description);
+    console.log(marker.description);
+   // setImage(marker.image);
   };
+  
+  useEffect(() => {
+    if (route.params) {
+        if (route.params.image) {
+          console.log("Image is a route"+route.params.image);
+             setImage(route.params.image);
+        }
+    }
+
+}, [route]);
+
+const handleImage = async () => {
+  const res = await navigation.navigate("CameraComponent", {
+      img: true
+  })
+
+};
 
   const handleSave = () => {
-    console.log(mark.coordinate);
+    console.log("clicked save");
+    console.log(image);
+    console.log(selectedMarker);
     if (selectedMarker) {
       // Update existing marker
       const updatedmark = mark.map((marker) =>
         marker === selectedMarker
-          ? { ...marker, title, description,image }
+          ? { ...marker, title, description,image }     //the image is stored in setImmage use it tomorrow..
           : marker
       );
+      
       setmark(updatedmark);
     } else {
       // Add new marker
+      console.log("Title"+title);
       setmark([...mark, { coordinate: selectedMarker.coordinate, title, description }]);
     }
 
@@ -177,6 +209,7 @@ const MapScreen = () => {
         onPress={handleMapPress}
         customMapStyle={theme.dark ? mapDarkStyle : mapStandardStyle}
       >
+        {/* the marker from the database or by image */}
         {state.markers.map((marker, index) => {
           const scaleStyle = {
             transform: [
@@ -200,83 +233,73 @@ const MapScreen = () => {
             </Marker>
           );
         })}
+        {/* 'this marker from onclick event' */}
         {mark.map((marker, index) => (
+        //  console.log(marker.coordinate),
+        
           <Marker
             key={index}
             coordinate={marker.coordinate}
             title={marker.title}
             description={marker.description}
+            image={marker.image}
             onPress={() => handleMarkerPress(marker)}
-          />
+          >
+             <Animated.View style={[styles.markerWrap]}>
+                <Animated.Image
+                  source={require('./map_marker.png')}
+                  style={styles.marker}
+                  resizeMode="cover"
+                />
+              </Animated.View>
+              </Marker>
         ))}
       </MapView>
-      {/* <View style={styles.centeredView}>
-      <Modal
-        animationType="slide"
-        style={styles.task}
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-         <View style={styles.centeredView}>
-        <View style={styles.modalContainer}>
-          <Text>Title:</Text>
-          <TextInput
-            style={styles.input}
-            value={title}
-            onChangeText={(text) => setTitle(text)}
-          />
+      
 
-          <Text>Description:</Text>
-          <TextInput
-            style={styles.input}
-            value={description}
-            onChangeText={(text) => setDescription(text)}
-          />
-           <TouchableOpacity onPress={handleImage}>
-                    <Text style={{ color: "#900", margin: 20 }}>Add Image</Text>
-                </TouchableOpacity>
 
-        <View style={styles.Button}>
-          <Button title="Save" onPress={handleSave}  /> 
-        </View>
-          <Button title="Cancel" onPress={() => setModalVisible(false)}   />
-       
-        </View>
-        </View>
-      </Modal>
-      </View> */}
-       <Dialog visible={setModalVisible} onDismiss={hideDialog} >
-                <Dialog.Title>ADD A TASK</Dialog.Title>
-                <Dialog.Content>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Title"
-                        value={title}
-                        onChangeText={(text) => setTitle(text)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Description"
-                        value={description}
-                        onChangeText={(text) => setDescription(text)}
-                    />
-                     <TouchableOpacity onPress={()=>{navigation.navigate('CameraComponent')}}>
-                    <Text style={{ color: "#900", margin: 20 }}>Add Image</Text>
-                     </TouchableOpacity>
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        <TouchableOpacity onPress={hideDialog} >
-                            <Text>CANCEL</Text>
-                        </TouchableOpacity>
-                        <Button
-                            onPress={handleSave}
-                            disabled={!title || !description || loading}
-                        >
-                            ADD
-                        </Button>
-                    </View>
-                </Dialog.Content>
-            </Dialog>
+      
+
+      <Dialog.Container visible={modalVisible}>
+        <Text>Title:</Text>
+        <Dialog.Input
+          value={title}
+          onChangeText={(text) => setTitle(text)}
+          placeholder="Enter title"
+        />
+
+        <Text>Description:</Text>
+        <Dialog.Input
+          value={description}
+          onChangeText={(text) => setDescription(text)}
+          placeholder="Enter description"
+        />
+
+<TouchableOpacity onPress={handleImage } style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {image ? (
+        <Image
+          source={{ uri: image }}
+          style={{ width: 200, height: 200, borderRadius: 10 }}
+        />
+      ) : (
+        <Text>No Image Selected</Text>
+      )}
+  </TouchableOpacity>
+      <TouchableOpacity style={{ marginTop: 20 }}>
+        <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
+          Select Image
+        </Text>
+      </TouchableOpacity>
+    
+
+        <Dialog.Button label="Save" onPress={handleSave} />
+        <Dialog.Button label="Cancel" onPress={() => setModalVisible(false)} />
+      </Dialog.Container>
+
+
+
+                  {/* <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       <View style={styles.searchBox}>
         <TextInput 
           placeholder="Search here"
@@ -362,21 +385,35 @@ const MapScreen = () => {
   );
 };
 
-export default MapScreen;
+export default memo(MapScreen);
 
 const styles = StyleSheet.create({
+  buttonClose: {
+    backgroundColor: '#2196F3',
+    marginLeft:60,
+    width:90,
+    height:25,
+    justifyContent:'flex-end',
+  },
+  textStyle: {
+   // height:25,
+   padding:3,
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   Button:{
-    marginBottom: 20,
-    marginTop:23,
+    marginBottom: 10,
+    marginTop:10,
   
-    backgroundColor:'gray'
+    backgroundColor:'blue'
   },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: '20%',
-    marginBottom:'50%',
+    marginTop: '40%',
+    marginBottom:'60%',
     marginRight:'10%',
     marginLeft:'10%',
     backgroundColor:'skyblue',
@@ -393,7 +430,7 @@ const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    padding: 45,
+    padding: 25,
     margin:25,
   },
   input: {

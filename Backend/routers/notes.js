@@ -76,6 +76,40 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
   }
 })
 
+// router.post('/upload-image', upload.single('myfile'), fetchuser,async (req, res) => {
+  
+//   const {originalname,mimetype,path}=req.file;
+
+//     const inl=new Model({
+//       user:req.user.id,
+//         name:originalname,
+//         image:{
+//             data:null,
+//             contentType:'image/png'
+//         }
+//     })
+//     const image = await inl.save();
+// //djbvsbhb
+//     const buffer = fs.readFileSync(path); // Read the file from the file system
+
+//     image.img.data = buffer; // Assign the buffer to the img.data property
+
+//     const savedImage = await image.save();
+// //     console.log(req.body.imt);
+// //     console.log("....");
+// //     console.log(req.file.originalname);
+// //    let data=new Model();
+// //    data.name=req.file.originalname;
+// //    fs.writeFileSync(req.file.originalname,req.file.filename);
+// //    data.img.data=fs.readFileSync(path.join("D:/mini-pro/main-page/ehr-project using mern/" + req.file.originalname));
+// //    data.img.contentType='image/png';
+// //    const savedNote=await data.save();
+// //    console.log(savedNote);
+// //    res.json(savedNote);
+   
+//     });
+
+
 // ROUTE 4: Delete . Login required
 router.delete('/deletenote/:id', fetchuser, async (req, res) => {
   try {
