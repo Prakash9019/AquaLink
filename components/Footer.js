@@ -12,6 +12,7 @@ import MapScreen from './MapScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MainScreen from '../screens/Main';
 import SignIn from '../screens/Register';
+import Example from '../screens/Example';
 const Tab = createMaterialBottomTabNavigator();
 // instead of camera we willl include file option
 const Footer = () => (
@@ -41,7 +42,7 @@ const Footer = () => (
   
     <Tab.Screen
       name="Profile"
-      component={MainScreen}
+      component={MapScreen}
       options={{
         tabBarLabel: 'Profile',
         tabBarColor: '#694fad',
@@ -52,7 +53,7 @@ const Footer = () => (
     />
     <Tab.Screen
       name="Explore"
-      component={SignIn}
+      component={Example}
       options={{
         tabBarLabel: 'Explore',
         tabBarColor: '#d02860',

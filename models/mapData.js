@@ -2,8 +2,8 @@ const Images = [
     { image: require("../components/flood.png") },
     { image: require("../components/flood3.webp") },
 ];
-
-export const markers = [
+export var main=[];
+export var markers = [
     {
       coordinate: {
         latitude: 22.6293867,

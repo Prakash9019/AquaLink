@@ -41,8 +41,8 @@ const CameraComponent = ({ route }) => {
         const data = await camera.takePictureAsync();
         // console.log(data);
         // console.log(route.params.img);
-        if (route.params.img) return navigation.navigate("MapScreen", { image: data.uri })
-        else return navigation.navigate("MapScreen", { image: data.uri })
+        if (route.params.img) return navigation.navigate("Example", { image: data.uri })
+        else return navigation.navigate("Example", { image: data.uri })
         //in repo their used
 
       //  Profile = ({ navigation, route }) 

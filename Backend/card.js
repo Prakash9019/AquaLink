@@ -1,8 +1,5 @@
 const mongoose= require("mongoose");
 const {Schema}= mongoose;
-const Images = [
-    { image: require("./flood.png") },
-];
 const userSchema= new Schema({
     user:{
         type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +25,7 @@ const userSchema= new Schema({
         min:2,
     },
     image:{
-        type:Images[0].image,
+        type:Buffer,
         default:""
     },
     rating:{
@@ -67,4 +64,4 @@ const userSchema= new Schema({
 
 // const User=mongoose.model("Users",userSchema);
 // User.createIndexes();
-module.exports=mongoose.model("Users",userSchema);
+module.exports=mongoose.model("card",userSchema);

@@ -16,6 +16,7 @@ import CameraComponent from './screens/Camera';
 import MapScreen from './components/MapScreen';
 import Footer from './components/Footer';
 import MapComponent from './screens/Example';
+import Example from './screens/Example';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -59,6 +60,13 @@ export default function App() {
                   }}
                 />
                 <Stack.Screen
+                  name="Example"
+                  component={Example}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+                 <Stack.Screen
                   name="MapScreen"
                   component={MapScreen}
                   options={{

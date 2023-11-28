@@ -2,6 +2,7 @@ const express=require('express');
 const router=express.Router();
 const fetchuser=require('../fetch');
 const Note=require('../note.js');
+const Card=require("../card.js");
 const { body, validationResult } = require('express-validator');
 const { findByIdAndUpdate } = require('../note.js');
 
@@ -43,6 +44,46 @@ router.post('/addnote', fetchuser, [
           res.status(500).send("Internal Server Error");
       }
   })
+
+  // 2: Add a new Note , Login required
+router.post('/addmark', fetchuser, [
+  body('title', 'Enter a valid title').isLength({ min: 3 }),
+  body('description', 'Description must be atleast 5 characters').isLength({ min: 3 }),], async (req, res) => {
+      try {
+        // using destructing method of javascript for send the requested data to corresponding fields
+          const { coordinate,title, description,image } = req.body;
+          // If there are errors, return Bad request and the errors
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+              return res.status(400).json({ errors: errors.array() });
+          }
+          //created a new note with "new" keyword
+          //new note object  contain title...
+          const note = new Card({
+            coordinate,title, description,image, user: req.user.id
+          })
+          //saving the notes 
+          const savedNote = await note.save()
+          // return the notes as the response
+          res.json(savedNote);
+
+      } catch (error) {
+          console.error(error.message);
+          res.status(500).send("Internal Server Error");
+      }
+  })
+
+//fetch all marker data 
+router.get('/fetchallmarkers', fetchuser,  async (req, res) => {
+  try {
+    console.log(req.user);
+    const notes = await Card.find({id : req.user.id});
+    res.json(notes);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
   //  3: Update . Login required
 router.put('/updatenote/:id', fetchuser, async (req, res) => {

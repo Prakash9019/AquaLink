@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^19.0.0",
-    "@react-native-async-storage/async-storage": "^1.19.5",
+    "@react-native-async-storage/async-storage": "1.18.2",
     "@react-navigation/material-bottom-tabs": "^6.2.19",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.15",
@@ -31,7 +31,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-google-places-autocomplete": "^2.5.6",
     "react-native-linear-gradient": "^2.8.3",
-    "react-native-maps": "^1.8.0",
+    "react-native-maps": "1.7.1",
     "react-native-maps-directions": "^1.9.0",
     "react-native-paper": "^5.11.1",
     "react-native-safe-area-context": "4.6.3",

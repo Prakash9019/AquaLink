@@ -23,7 +23,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
-import { markers, mapDarkStyle, mapStandardStyle } from '../models/mapData';
+import { markers,main, mapDarkStyle, mapStandardStyle } from '../models/mapData';
 import StarRating from "../Functions/StarRating"
 import { useNavigation, useTheme } from '@react-navigation/native';
 
@@ -69,21 +69,25 @@ const MapScreen = ({route}) => {
   };
 
   const [state, setState] = React.useState(initialMapState);
-  
+  const [imageUri, setImageUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image,setImage]=useState('');
+  const [image,setImage]=useState(null);
   const [mark, setmark] = useState([]);
 
-  const handleMapPress = (event) => {
+  const handleMapPress = async (event) => {
    // setModalVisible(true);            //   check this out
     setSelectedMarker(null);
     setTitle('');
     setDescription('');
-    setImage('');
+    setImageUri(null);
     setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
+   // main.push([...mark, { coordinate: event.nativeEvent.coordinate }])
+    // console.log("data....."+event.nativeEvent.coordinate.latitude);
+    // console.log(setmark);
+    // console.log(mark);
     
   };
 //   const hideDialog = () => {
@@ -94,44 +98,73 @@ const MapScreen = ({route}) => {
     setSelectedMarker(marker);
     setTitle(marker.title);
     setDescription(marker.description);
-    console.log(marker.description);
+ //   setImage(marker.image);
+    console.log("hello");
    // setImage(marker.image);
   };
   
   useEffect(() => {
     if (route.params) {
         if (route.params.image) {
-          console.log("Image is a route"+route.params.image);
-             setImage(route.params.image);
+         // console.log("Image is a route"+route.params.image);
+             setImageUri(route.params.image);
         }
     }
 
-}, [route]);
+    // {mark.map((marker, index) => (
+    //   //  console.log(marker.coordinate),
+      
+    //     <Marker
+    //       key={index}
+    //       coordinate={marker.coordinate}
+    //       title={marker.title}
+    //       description={marker.description}
+    //     //  image={marker.image}
+    //       onPress={() => handleMarkerPress(marker)}
+    //     >
+    //        <Animated.View style={[styles.markerWrap]}>
+    //           <Animated.Image
+    //             source={require('./map_marker.png')}
+    //             style={styles.marker}
+    //             resizeMode="cover"
+    //           />
+    //         </Animated.View>
+    //         </Marker>
+    //   ))}
+    console.log(route.params.image);
+}, [route.params]);
 
-const handleImage = async () => {
-  const res = await navigation.navigate("CameraComponent", {
-      img: true
-  })
+const handleImage = () => {
+  const res=navigation.navigate("CameraComponent", { image: true })
+  if(res){
+    console.log(res.image);
+  }
+ // console.log("....image...."+image);
+ // setImage(image);
 
 };
 
   const handleSave = () => {
     console.log("clicked save");
-    console.log(image);
+   // console.log(image);
     console.log(selectedMarker);
     if (selectedMarker) {
+      console.log("Title111"+title+description,imageUri);
       // Update existing marker
       const updatedmark = mark.map((marker) =>
         marker === selectedMarker
-          ? { ...marker, title, description,image }     //the image is stored in setImmage use it tomorrow..
+          ? { ...marker, title, description,imageUri }     //the image is stored in setImmage use it tomorrow..
           : marker
       );
-      
+      updatedmark.map((m)=>{
+        console.log(m);
+      })
+      console.log('updatded is '+ updatedmark);
       setmark(updatedmark);
     } else {
       // Add new marker
       console.log("Title"+title);
-      setmark([...mark, { coordinate: selectedMarker.coordinate, title, description }]);
+      setmark([...mark, { coordinate: selectedMarker.coordinate, title, description,imageUri }]);
     }
 
     setModalVisible(false);
@@ -140,34 +173,34 @@ const handleImage = async () => {
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
 
-  useEffect(() => {
-    mapAnimation.addListener(({ value }) => {
-      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
-      if (index >= state.markers.length) {
-        index = state.markers.length - 1;
-      }
-      if (index <= 0) {
-        index = 0;
-      }
+  // useEffect(() => {
+  //   mapAnimation.addListener(({ value }) => {
+  //     let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item
+  //     if (index >= state.markers.length) {
+  //       index = state.markers.length - 1;
+  //     }
+  //     if (index <= 0) {
+  //       index = 0;
+  //     }
 
-      clearTimeout(regionTimeout);
+  //     clearTimeout(regionTimeout);
 
-      const regionTimeout = setTimeout(() => {
-        if( mapIndex !== index ) {
-          mapIndex = index;
-          const { coordinate } = state.markers[index];
-          _map.current.animateToRegion(
-            {
-              ...coordinate,
-              latitudeDelta: state.region.latitudeDelta,
-              longitudeDelta: state.region.longitudeDelta,
-            },
-            350
-          );
-        }
-      }, 10);
-    });
-  });
+  //     const regionTimeout = setTimeout(() => {
+  //       if( mapIndex !== index ) {
+  //         mapIndex = index;
+  //         const { coordinate } = state.markers[index];
+  //         _map.current.animateToRegion(
+  //           {
+  //             ...coordinate,
+  //             latitudeDelta: state.region.latitudeDelta,
+  //             longitudeDelta: state.region.longitudeDelta,
+  //           },
+  //           350
+  //         );
+  //       }
+  //     }, 10);
+  //   });
+  // });
 
   const interpolations = state.markers.map((marker, index) => {
     const inputRange = [
@@ -210,7 +243,7 @@ const handleImage = async () => {
         customMapStyle={theme.dark ? mapDarkStyle : mapStandardStyle}
       >
         {/* the marker from the database or by image */}
-        {state.markers.map((marker, index) => {
+        {/* {state.markers.map((marker, index) => {
           const scaleStyle = {
             transform: [
               {
@@ -232,7 +265,7 @@ const handleImage = async () => {
               </Animated.View>
             </Marker>
           );
-        })}
+        })} */}
         {/* 'this marker from onclick event' */}
         {mark.map((marker, index) => (
         //  console.log(marker.coordinate),
@@ -242,7 +275,7 @@ const handleImage = async () => {
             coordinate={marker.coordinate}
             title={marker.title}
             description={marker.description}
-            image={marker.image}
+          //  image={marker.image}
             onPress={() => handleMarkerPress(marker)}
           >
              <Animated.View style={[styles.markerWrap]}>
@@ -274,22 +307,17 @@ const handleImage = async () => {
           onChangeText={(text) => setDescription(text)}
           placeholder="Enter description"
         />
-
-<TouchableOpacity onPress={handleImage } style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {image ? (
-        <Image
-          source={{ uri: image }}
-          style={{ width: 200, height: 200, borderRadius: 10 }}
-        />
-      ) : (
+ <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {imageUri ? console.log("the image is"+imageUri) : (
         <Text>No Image Selected</Text>
       )}
-  </TouchableOpacity>
-      <TouchableOpacity style={{ marginTop: 20 }}>
+
+      <TouchableOpacity onPress={handleImage} style={{ marginTop: 20 }}>
         <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
           Select Image
         </Text>
       </TouchableOpacity>
+    </View>
     
 
         <Dialog.Button label="Save" onPress={handleSave} />
