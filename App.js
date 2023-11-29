@@ -52,6 +52,7 @@ export default function App() {
                     headerShown: false,
                   }}
                 /> */}
+               
                  <Stack.Screen
                   name="Footer"
                   component={Footer}
@@ -66,7 +67,7 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-                 <Stack.Screen
+                <Stack.Screen
                   name="MapScreen"
                   component={MapScreen}
                   options={{

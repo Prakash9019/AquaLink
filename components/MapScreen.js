@@ -1,27 +1,10 @@
 import React, { useEffect ,useState,memo } from 'react';
 import Dialog from 'react-native-dialog';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  ScrollView,
-  Animated,
-  Keyboard,
-  Pressable,
-  Image,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Platform,
-  Modal,
-} from "react-native";
+import {  StyleSheet,  Text,  TextInput,  View,  ScrollView,  Animated,  Keyboard,  Pressable,
+  Image,  TouchableOpacity,  KeyboardAvoidingView,  TouchableWithoutFeedback,  Dimensions,  Platform,  Modal,} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {  Button } from "react-native-paper"
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import { markers,main, mapDarkStyle, mapStandardStyle } from '../models/mapData';
 import StarRating from "../Functions/StarRating"
@@ -32,34 +15,14 @@ const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
-const MapScreen = ({route}) => {
+const MapScreen = () => {
+  const navigation = useNavigation();
+  
   const theme = useTheme();
-  const navigation=useNavigation();
+ // const navigation=useNavigation();
 
   const initialMapState = {
     markers,
-    categories: [
-      { 
-        name: 'Fastfood Center', 
-        icon: <MaterialCommunityIcons style={styles.chipsIcon} name="food-fork-drink" size={18} />,
-      },
-      {
-        name: 'Restaurant',
-        icon: <Ionicons name="ios-restaurant" style={styles.chipsIcon} size={18} />,
-      },
-      {
-        name: 'Dineouts',
-        icon: <Ionicons name="md-restaurant" style={styles.chipsIcon} size={18} />,
-      },
-      {
-        name: 'Snacks Corner',
-        icon: <MaterialCommunityIcons name="food" style={styles.chipsIcon} size={18} />,
-      },
-      {
-        name: 'Hotel',
-        icon: <Fontisto name="hotel" style={styles.chipsIcon} size={15} />,
-      },
-  ],
     region: {
       latitude: 22.62938671242907,
       longitude: 88.4354486029795,
@@ -74,8 +37,11 @@ const MapScreen = ({route}) => {
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [image,setImage]=useState(null);
   const [mark, setmark] = useState([]);
+  const [componentLoaded, setComponentLoaded] = useState(false);
+  // const [hasPermission, setHasPermission] = useState(null);
+  //   const [type, setType] = useState(CameraType.back);
+  //   const [camera, setCamera] = useState(null);
 
   const handleMapPress = async (event) => {
    // setModalVisible(true);            //   check this out
@@ -84,15 +50,10 @@ const MapScreen = ({route}) => {
     setDescription('');
     setImageUri(null);
     setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
-   // main.push([...mark, { coordinate: event.nativeEvent.coordinate }])
-    // console.log("data....."+event.nativeEvent.coordinate.latitude);
-    // console.log(setmark);
-    // console.log(mark);
+
     
   };
-//   const hideDialog = () => {
-//     setModalVisible(!modalVisible)
-// }
+
   const handleMarkerPress = (marker) => {
     setModalVisible(true);
     setSelectedMarker(marker);
@@ -103,42 +64,28 @@ const MapScreen = ({route}) => {
    // setImage(marker.image);
   };
   
-  useEffect(() => {
-    if (route.params) {
-        if (route.params.image) {
-         // console.log("Image is a route"+route.params.image);
-             setImageUri(route.params.image);
-        }
-    }
+//    useEffect(() => {
+//     if (componentLoaded && route.params) {
+//       console.log("hiii."+route.params.image)
+//         if (route.params.image) {
+//             setImageUri(route.params.image)
+//         }
+//     }
 
-    // {mark.map((marker, index) => (
-    //   //  console.log(marker.coordinate),
-      
-    //     <Marker
-    //       key={index}
-    //       coordinate={marker.coordinate}
-    //       title={marker.title}
-    //       description={marker.description}
-    //     //  image={marker.image}
-    //       onPress={() => handleMarkerPress(marker)}
-    //     >
-    //        <Animated.View style={[styles.markerWrap]}>
-    //           <Animated.Image
-    //             source={require('./map_marker.png')}
-    //             style={styles.marker}
-    //             resizeMode="cover"
-    //           />
-    //         </Animated.View>
-    //         </Marker>
-    //   ))}
-    console.log(route.params.image);
-}, [route.params]);
+// }, [componentLoaded])
+const handleCameraComplete = (image) => {
+  console.log("a.........."+image)
+  setImageUri(image);
+};
 
 const handleImage = () => {
-  const res=navigation.navigate("CameraComponent", { image: true })
-  if(res){
-    console.log(res.image);
-  }
+  navigation.navigate('CameraComponent', {
+    onComplete: (image) => {
+      setImageUri(image);
+    },
+  });
+  setComponentLoaded(true);
+
  // console.log("....image...."+image);
  // setImage(image);
 
@@ -202,21 +149,6 @@ const handleImage = () => {
   //   });
   // });
 
-  const interpolations = state.markers.map((marker, index) => {
-    const inputRange = [
-      (index - 1) * CARD_WIDTH,
-      index * CARD_WIDTH,
-      ((index + 1) * CARD_WIDTH),
-    ];
-
-    const scale = mapAnimation.interpolate({
-      inputRange,
-      outputRange: [1, 1.5, 1],
-      extrapolate: "clamp"
-    });
-
-    return { scale };
-  });
 
   const onMarkerPress = (mapEventData) => {
     const markerID = mapEventData._targetInst.return.key;
@@ -243,7 +175,7 @@ const handleImage = () => {
         customMapStyle={theme.dark ? mapDarkStyle : mapStandardStyle}
       >
         {/* the marker from the database or by image */}
-        {/* {state.markers.map((marker, index) => {
+        {state.markers.map((marker, index) => {
           const scaleStyle = {
             transform: [
               {
@@ -252,9 +184,6 @@ const handleImage = () => {
             ],
           };
           return (
-            // <Marker coordinate={marker.coordinate} >
-
-            // </Marker>
             <Marker key={index} coordinate={marker.coordinate} onPress={(e)=>onMarkerPress(e)}>
               <Animated.View style={[styles.markerWrap]}>
                 <Animated.Image
@@ -265,7 +194,7 @@ const handleImage = () => {
               </Animated.View>
             </Marker>
           );
-        })} */}
+        })}
         {/* 'this marker from onclick event' */}
         {mark.map((marker, index) => (
         //  console.log(marker.coordinate),
@@ -308,7 +237,10 @@ const handleImage = () => {
           placeholder="Enter description"
         />
  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {imageUri ? console.log("the image is"+imageUri) : (
+      {imageUri ? <Image
+              source={{ uri: imageUri }}
+              style={{ width: 200, height: 200 }}
+            /> : (
         <Text>No Image Selected</Text>
       )}
 
@@ -337,29 +269,7 @@ const handleImage = () => {
         />
         <Ionicons name="ios-search" size={20} />
       </View>
-      <ScrollView
-        horizontal
-        scrollEventThrottle={1}
-        showsHorizontalScrollIndicator={false}
-        height={50}
-        style={styles.chipsScrollView}
-        contentInset={{ // iOS only
-          top:0,
-          left:0,
-          bottom:0,
-          right:20
-        }}
-        contentContainerStyle={{
-          paddingRight: Platform.OS === 'android' ? 20 : 0
-        }}
-      >
-        {state.categories.map((category, index) => (
-          <TouchableOpacity key={index} style={styles.chipsItem}>
-            {category.icon}
-            <Text>{category.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+     
       
       <Animated.ScrollView
         ref={_scrollView}

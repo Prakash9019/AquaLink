@@ -16,7 +16,7 @@ import Example from '../screens/Example';
 const Tab = createMaterialBottomTabNavigator();
 // instead of camera we willl include file option
 const Footer = () => (
-  <Tab.Navigator initialRouteName="MapScreen" activeColor="#fff">
+  <Tab.Navigator initialRouteName="HomeScreen" activeColor="#fff">
     <Tab.Screen
       name="Home"
       component={HomeScreen}

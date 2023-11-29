@@ -21,6 +21,38 @@ import StarRating from "../Functions/StarRating"
 import { useNavigation, useTheme } from '@react-navigation/native';
 
 const Example = ({ route }) => {
+  const initialMapState = {
+    markers,
+    categories: [
+      { 
+        name: 'Fastfood Center', 
+        icon: <MaterialCommunityIcons style={styles.chipsIcon} name="food-fork-drink" size={18} />,
+      },
+      {
+        name: 'Restaurant',
+        icon: <Ionicons name="ios-restaurant" style={styles.chipsIcon} size={18} />,
+      },
+      {
+        name: 'Dineouts',
+        icon: <Ionicons name="md-restaurant" style={styles.chipsIcon} size={18} />,
+      },
+      {
+        name: 'Snacks Corner',
+        icon: <MaterialCommunityIcons name="food" style={styles.chipsIcon} size={18} />,
+      },
+      {
+        name: 'Hotel',
+        icon: <Fontisto name="hotel" style={styles.chipsIcon} size={15} />,
+      },
+  ],
+    region: {
+      latitude: 22.62938671242907,
+      longitude: 88.4354486029795,
+      latitudeDelta: 0.04864195044303443,
+      longitudeDelta: 0.040142817690068,
+    },
+  };
+
   const [imageUri, setImageUri] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -131,6 +163,30 @@ console.log("hello");
         </View>
         <Dialog.Button label="Cancel" onPress={() => setModalVisible(false)} />
       </Dialog.Container>
+      {/* //it is for the scrollview of the tab at the search bar */}
+      <ScrollView
+        horizontal
+        scrollEventThrottle={1}
+        showsHorizontalScrollIndicator={false}
+        height={50}
+        style={styles.chipsScrollView}
+        contentInset={{ // iOS only
+          top:0,
+          left:0,
+          bottom:0,
+          right:20
+        }}
+        contentContainerStyle={{
+          paddingRight: Platform.OS === 'android' ? 20 : 0
+        }}
+      >
+        {state.categories.map((category, index) => (
+          <TouchableOpacity key={index} style={styles.chipsItem}>
+            {category.icon}
+            <Text>{category.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 };
