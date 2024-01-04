@@ -1,14 +1,15 @@
 import React, { useEffect ,useState,memo } from 'react';
 import Dialog from 'react-native-dialog';
-import {  StyleSheet,  Text,  TextInput,  View,  ScrollView,  Animated,  Keyboard,  Pressable,
+import {  StyleSheet,  Text,  TextInput,  View,  ScrollView,    Alert,  Animated,  Keyboard,  Pressable,
   Image,  TouchableOpacity,  KeyboardAvoidingView,  TouchableWithoutFeedback,  Dimensions,  Platform,  Modal,} from "react-native";
 import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {  Button } from "react-native-paper"
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+import axios from 'axios';
 import { markers,main, mapDarkStyle, mapStandardStyle } from '../models/mapData';
 import StarRating from "../Functions/StarRating"
-import { useNavigation, useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme,useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width, height } = Dimensions.get("window");
 const CARD_HEIGHT = 220;
@@ -17,8 +18,9 @@ const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
 const MapScreen = () => {
   const navigation = useNavigation();
-  
+ // const route = useRoute();
   const theme = useTheme();
+ // console.log(route);
  // const navigation=useNavigation();
 
   const initialMapState = {
@@ -32,13 +34,13 @@ const MapScreen = () => {
   };
 
   const [state, setState] = React.useState(initialMapState);
-  const [imageUri, setImageUri] = useState(null);
+  const [imageUri, setImageUri] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [mark, setmark] = useState([]);
-  const [componentLoaded, setComponentLoaded] = useState(false);
+  const [effect,setEffect]=useState(false);
   // const [hasPermission, setHasPermission] = useState(null);
   //   const [type, setType] = useState(CameraType.back);
   //   const [camera, setCamera] = useState(null);
@@ -60,7 +62,6 @@ const MapScreen = () => {
     setTitle(marker.title);
     setDescription(marker.description);
  //   setImage(marker.image);
-    console.log("hello");
    // setImage(marker.image);
   };
   
@@ -74,24 +75,33 @@ const MapScreen = () => {
 
 // }, [componentLoaded])
 const handleCameraComplete = (image) => {
-  console.log("a.........."+image)
+  console.log("........................................................................................");
+  console.log(modalVisible);
   setImageUri(image);
+  console.log(modalVisible)
 };
 
 const handleImage = () => {
-  navigation.navigate('CameraComponent', {
-    onComplete: (image) => {
-      setImageUri(image);
-    },
+   navigation.navigate('CameraComponent',{
+    onComplete: setImageUri
   });
-  setComponentLoaded(true);
-
- // console.log("....image...."+image);
- // setImage(image);
-
 };
 
-  const handleSave = () => {
+// const handleImage = () => {
+//   navigation.navigate('CameraComponent', {
+//     onComplete: (image) => {
+//       setImageUri(image);
+//     },
+//   });
+//   setComponentLoaded(true);
+
+//  // console.log("....image...."+image);
+//  // setImage(image);
+
+// };
+
+
+  const handleSave = async () => {
     console.log("clicked save");
    // console.log(image);
     console.log(selectedMarker);
@@ -106,8 +116,29 @@ const handleImage = () => {
       updatedmark.map((m)=>{
         console.log(m);
       })
-      console.log('updatded is '+ updatedmark);
+      console.log(updatedmark);
+      // try {
+      //   const response = await axios.post('http://localhost:5000/api/notes/addmark', {
+      //       coordinate:updatedmark.coordinate,
+      //       description:updatedmark.description,
+      //       title:updatedmark.title,
+      //       image:updatedmark.imageUri,
+      //   },{headers: {
+      //     'Content-Type': 'application/json',
+      //     "jwtData": AsyncStorage.getItem('jwtData')
+         
+      // }});
+  
+      //   const json = response.data;
+      //   console.log(json);  
+      //   // Navigate to the next screen or perform other actions
+      //   console.log('Token saved:', json.jwtData);
+      // } catch (error) {
+      //   console.error('Error during login:', error.message);
+      //  Alert.alert('Error', 'Login failed');
+      // }
       setmark(updatedmark);
+      setEffect(true);
     } else {
       // Add new marker
       console.log("Title"+title);
@@ -243,6 +274,7 @@ const handleImage = () => {
             /> : (
         <Text>No Image Selected</Text>
       )}
+      {console.log(imageUri+modalVisible)}
 
       <TouchableOpacity onPress={handleImage} style={{ marginTop: 20 }}>
         <Text style={{ color: 'blue', textDecorationLine: 'underline' }}>
@@ -255,7 +287,7 @@ const handleImage = () => {
         <Dialog.Button label="Save" onPress={handleSave} />
         <Dialog.Button label="Cancel" onPress={() => setModalVisible(false)} />
       </Dialog.Container>
-
+      {console.log(imageUri+modalVisible)}
 
 
                   {/* <KeyboardAvoidingView behavior="padding" style={styles.container}>

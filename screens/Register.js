@@ -10,9 +10,11 @@ import {
     StyleSheet,
     ScrollView,
     StatusBar,
+    Alert
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Animatable from 'react-native-animatable';
+import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 //import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -24,8 +26,9 @@ const SignIn = () => {
 
     const [data, setData] = React.useState({
         username: '',
-        password: '',
         email: '',
+        password: '',
+        cpassword:'',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
@@ -33,12 +36,14 @@ const SignIn = () => {
     const handleSubmit1 = async (e) => {
         e.preventDefault();
         try {
+            
+            console.log(data);
             const response = await axios.post('https://notes-application-api-pi.vercel.app/api/auth/user', {
                 username:data.username,
               email: data.email,
               password: data.password,
             });
-      
+            console.log("hellllooooo")
             const json = response.data;
             console.log(json);
             // Save the token to AsyncStorage
@@ -70,19 +75,10 @@ const SignIn = () => {
     }
    //emailInputChange
    const emailInputChange = (val) => {
-    if( val.length !== 0 ) {
-        setData({
-            ...data,
-            email: val,
-            check_textInputChange: true
-        });
-    } else {
-        setData({
-            ...data,
-            email: val,
-            check_textInputChange: false
-        });
-    }
+    setData({
+        ...data,
+        email: val
+    });
 }
 
     const handlePasswordChange = (val) => {
@@ -95,7 +91,7 @@ const SignIn = () => {
     const handleConfirmPasswordChange = (val) => {
         setData({
             ...data,
-            email: val
+            cpassword: val
         });
     }
 

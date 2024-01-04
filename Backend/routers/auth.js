@@ -53,6 +53,7 @@ router.post('/login',[
   body('email','Enter a Correct Email').isEmail(),
   body('password','Password cnt blank').exists(),
 ],async (req,res)=>{
+  console.log("hello...........");
   let sucess=false;
   //check for possible errors 
    const errors = validationResult(req);
@@ -62,6 +63,7 @@ router.post('/login',[
   const {email,password}=req.body;
   try{
   let user=await User.findOne({email});
+  console.log(email);
   if(!user){
     return res.status(400).send("please try to login with correct credentials...");
   }

@@ -14,7 +14,6 @@ import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 import { useTheme } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -92,25 +91,43 @@ const Signup = () => {
             });
         }
     }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('https://notes-application-api-pi.vercel.app/api/auth/login', {
-              email: data.username,
+        const d={
+            email: data.username,
               password: data.password,
+        }
+
+        // const response = await axios.post('https://notes-application-api-pi.vercel.app/api/auth/login', {
+        //     email: data.username,
+        //     password: data.password,
+        //   });
+    
+        //   const json = response.data;
+
+        try {
+            const response = await fetch("https://notes-application-api-pi.vercel.app/api/auth/login", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email: data.username, password: data.password})
             });
-      
-            const json = response.data;
-            console.log(json);
-            // Save the token to AsyncStorage
-            await AsyncStorage.setItem('jwtData', json.jwtData);
-      
-            // Navigate to the next screen or perform other actions
-            console.log('Token saved:', json.jwtData);
-            navigation.navigate("MapScreen");
+            const json = await response.json();
+            if (json.sucess){
+            
+                // Save the auth token and redirect
+                AsyncStorage.setItem('jwtData', json.jwtData); 
+                console.log("Token saved "+json.jwtData);
+                navigation.navigate("MapScreen");
+    
+            }
+            else{
+                Alert.alert(json.errors[0].msg);
+            }
           } catch (error) {
-            console.error('Error during login:', error.message);
-           Alert.alert('Error', 'Login failed');
+           Alert.alert('Error', error.message);
           }
     }
 

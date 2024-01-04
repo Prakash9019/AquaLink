@@ -11,12 +11,11 @@ import { store } from './store';
 import HomeScreen from './screens/HomeScreen';
 import Signup from './screens/Login';
 import SignIn from './screens/Register';
-import MainScreen from './screens/Main';
+
 import CameraComponent from './screens/Camera';
 import MapScreen from './components/MapScreen';
 import Footer from './components/Footer';
-import MapComponent from './screens/Example';
-import Example from './screens/Example';
+//import Example from './screens/Example';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -26,11 +25,8 @@ export default function App() {
         <SafeAreaProvider>
           <TailwindProvider>
            
-              <Stack.Navigator>
-              
-             
-                
-              {/* <Stack.Screen
+              <Stack.Navigator> 
+              <Stack.Screen
                   name="HomeScreen"
                   component={HomeScreen}
                   options={{
@@ -51,7 +47,7 @@ export default function App() {
                   options={{
                     headerShown: false,
                   }}
-                /> */}
+                />
                
                  <Stack.Screen
                   name="Footer"
@@ -60,13 +56,7 @@ export default function App() {
                     headerShown: false,
                   }}
                 />
-                <Stack.Screen
-                  name="Example"
-                  component={Example}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
+               
                 <Stack.Screen
                   name="MapScreen"
                   component={MapScreen}
@@ -80,15 +70,7 @@ export default function App() {
                   options={{
                     headerShown: false,
                   }}
-                />
-              <Stack.Screen
-                  name="mapp"
-                  component={MapComponent}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-                
+                />                
               </Stack.Navigator>
           </TailwindProvider>
         </SafeAreaProvider>

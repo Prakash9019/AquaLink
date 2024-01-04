@@ -12,7 +12,7 @@ const CameraComponent = () => {
     const [camera, setCamera] = useState(null);
     const navigation=useNavigation();
     const route = useRoute();
-    console.log(route);
+   // console.log(route);
 
 
 
@@ -36,6 +36,8 @@ const CameraComponent = () => {
         });
      //   console.log("data" +data.assets[0].uri);
      if (route.params && route.params.onComplete) {
+        console.log("most...")
+        console.log(data.assets[0].uri);
         route.params.onComplete(data.assets[0].uri);
       }
       navigation.goBack();
@@ -49,8 +51,13 @@ const CameraComponent = () => {
         // console.log(data);
         // console.log(route.params.img);
       //  route.params.img=true;
-      console.log(data);
+      
+    //   console.log(data);
+      
       if (route.params && route.params.onComplete) {
+        console.log(data);
+        console.log("most...")
+        console.log(data.uri)
         route.params.onComplete(data.uri);
       }
       navigation.goBack();
