@@ -2,20 +2,18 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import React, { useEffect, useState } from 'react'
 import { Avatar, Button } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadUser, logout, updateProfile } from '../redux/action'
 import mime from "mime"
-import Loader from '../components/Loader'
 
 const Profile = ({ navigation, route }) => {
 
-    const { user, loading } = useSelector(state => state.auth)
+    // const { user, loading } = useSelector(state => state.auth)
 
 
-    const [name, setName] = useState(user.name);
-    const [avatar, setAvatar] = useState(user.avatar.url);
+    const [name, setName] = useState("");
+    const [avatar, setAvatar] = useState(null);
 
 
-    const dispatch = useDispatch()
+  //  const dispatch = useDispatch()
 
     const submitHandler = async () => {
         const myForm = new FormData();
@@ -25,19 +23,19 @@ const Profile = ({ navigation, route }) => {
             type: mime.getType(avatar),
             name: avatar.split("/").pop()
         })
-        await dispatch(updateProfile(myForm));
-        dispatch(loadUser())
+        // await dispatch(updateProfile(myForm));
+        // dispatch(loadUser())
     }
 
     const handleImage = () => {
         navigation.navigate("camera", {
-            updateProfile: true
+            updateProfile: avatar
         })
     };
 
-    const logoutHandler = () => {
-        dispatch(logout())
-    }
+    // const logoutHandler = () => {
+    //     dispatch(logout())
+    // }
 
 
     useEffect(() => {
@@ -50,7 +48,7 @@ const Profile = ({ navigation, route }) => {
     }, [route])
 
     return (
-        loading ? <Loader /> : (
+       
             <View
                 style={{
                     flex: 1,
@@ -87,29 +85,20 @@ const Profile = ({ navigation, route }) => {
 
                 <Button
                     color='rgb(50,50,50)'
-                    onPress={() => navigation.navigate("changepassword")}
+                    // onPress={() => navigation.navigate("changepassword")}
                 >
                     Change Password
                 </Button>
 
                 <Button
                     color='rgb(50,50,50)'
-                    onPress={logoutHandler}
+                    // onPress={logoutHandler}
                 >
                     Logout
                 </Button>
 
-                {
-                    user.verified ? null : <Button
-                        onPress={() => navigation.navigate("verify")}
-                    >
-                        Verify
-                    </Button>
-                }
-
 
             </View>
-        )
     )
 }
 

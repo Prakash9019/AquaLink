@@ -27,6 +27,13 @@ export default function App() {
            
               <Stack.Navigator> 
               <Stack.Screen
+                  name="Footer"
+                  component={Footer}
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              <Stack.Screen
                   name="HomeScreen"
                   component={HomeScreen}
                   options={{
@@ -49,13 +56,7 @@ export default function App() {
                   }}
                 />
                
-                 <Stack.Screen
-                  name="Footer"
-                  component={Footer}
-                  options={{
-                    headerShown: false,
-                  }}
-                />
+                
                
                 <Stack.Screen
                   name="MapScreen"

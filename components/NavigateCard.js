@@ -13,7 +13,73 @@ const NavigateCard = () => {
     const navigation = useNavigation();
 
     return (
+
         <SafeAreaView className="bg-white flex-1">
+           {/* import React from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+
+const Card = ({ imageSource, title, description, onLikePress, onCommentPress, onDeletePress }) => {
+  return (
+    <View style={styles.card}>
+      <Image source={{ uri: imageSource }} style={styles.image} />
+      <View style={styles.content}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onLikePress} style={styles.button}>
+            <Text>Like</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onCommentPress} style={styles.button}>
+            <Text>Comment</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onDeletePress} style={styles.button}>
+            <Text>Delete</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row',
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+  },
+  image: {
+    width: 80,
+    height: 80,
+    marginRight: 10,
+  },
+  content: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  description: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  button: {
+    marginRight: 10,
+    padding: 5,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+});
+
+export default Card; */}
+
+
             <Text className="text-center py-5 text-xl">Good Monring, studio_xlnce</Text>
 
             <View className="flex-shrink flex-grow border-t border-gray-200">

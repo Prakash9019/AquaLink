@@ -11,7 +11,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import MapScreen from './MapScreen';
 import HomeScreen from '../screens/HomeScreen';
 import MainScreen from '../screens/Main';
-import SignIn from '../screens/Register';
+import Profile from "../screens/Profile"
+import uploads from '../screens/uploads';
 import Example from '../screens/Example';
 const Tab = createMaterialBottomTabNavigator();
 // instead of camera we willl include file option
@@ -42,7 +43,7 @@ const Footer = () => (
   
     <Tab.Screen
       name="Profile"
-      component={MapScreen}
+      component={Profile}
       options={{
         tabBarLabel: 'Profile',
         tabBarColor: '#694fad',
@@ -53,7 +54,7 @@ const Footer = () => (
     />
     <Tab.Screen
       name="Explore"
-      component={Example}
+      component={uploads}
       options={{
         tabBarLabel: 'Explore',
         tabBarColor: '#d02860',
