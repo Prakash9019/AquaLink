@@ -120,7 +120,7 @@ const Signup = () => {
                 // Save the auth token and redirect
                 AsyncStorage.setItem('jwtData', json.jwtData); 
                 console.log("Token saved "+json.jwtData);
-                navigation.navigate("MapScreen");
+                navigation.navigate("Footer");
     
             }
             else{
@@ -203,7 +203,7 @@ const Signup = () => {
             <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
             </Animatable.View>
             }
-            
+           
 
             <Text style={[styles.text_footer, {
                 color: colors.text,

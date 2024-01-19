@@ -36,8 +36,9 @@ const CameraComponent = () => {
         });
      //   console.log("data" +data.assets[0].uri);
      if (route.params && route.params.onComplete) {
-        console.log("most...")
-        console.log(data.assets[0].uri);
+        // console.log("most...")
+        // console.log(data.assets[0].uri);
+        
         route.params.onComplete(data.assets[0].uri);
       }
       navigation.goBack();
@@ -55,9 +56,9 @@ const CameraComponent = () => {
     //   console.log(data);
       
       if (route.params && route.params.onComplete) {
-        console.log(data);
-        console.log("most...")
-        console.log(data.uri)
+        // console.log(data);
+        // console.log("most...")
+        // console.log(data.uri)
         route.params.onComplete(data.uri);
       }
       navigation.goBack();
