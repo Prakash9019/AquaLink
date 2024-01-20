@@ -36,7 +36,7 @@ const MapScreen = () => {
   };
 
   const [state, setState] = React.useState(initialMapState);
-  const [save,setSave] =useState(true);
+  const [type,setType] =useState('');
   const [imageUri, setImageUri] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedMarker, setSelectedMarker] = useState(null);
@@ -325,19 +325,25 @@ const handleImage = () => {
           onChangeText={(text) => setDescription(text)}
           placeholder="Enter description"
         />
+         <Text>Type Of Problem:</Text>
+        <Dialog.Input
+          value={type}
+          onChangeText={(text) => setType(text)}
+          placeholder="Enter type of Problem"
+        />
  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       {imageUri ? <Image
               source={{ uri: imageUri }}
               style={{ width: 200, height: 200 }}
             /> : (
-        <Text>No Image Selected</Text>
+              <TouchableOpacity onPress={handleImage} style={{ marginTop: 20 }} >
+              <Text style={{ color: 'blue', textDecorationLine: 'underline' }} >
+                Select Image
+              </Text>
+            </TouchableOpacity>
       )}
 
-      <TouchableOpacity onPress={handleImage} style={{ marginTop: 20 }} >
-        <Text style={{ color: 'blue', textDecorationLine: 'underline' }} >
-          Select Image
-        </Text>
-      </TouchableOpacity>
+     
     </View>
     
 

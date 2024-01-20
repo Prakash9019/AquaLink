@@ -10,9 +10,10 @@ const jwt_s="surya";
 // user register
 router.post('/user',[
     body('username').isLength({min:3}),
-    body('email').isLength({min:3}),
+    body('email').isLength({min:2}),
     body('password').isLength({min:3})
 ],async (req,res)=>{
+  console.log(req);
      const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).send("please try to login with error box...");
@@ -23,7 +24,7 @@ router.post('/user',[
     if(user){
       return res.status(400).send("please try to login user error...");
     }
-    console.log(user);
+
     const salt=await bcrypt.genSalt(10);
     const secPass=await bcrypt.hash(req.body.password,salt);
    
@@ -53,7 +54,6 @@ router.post('/login',[
   body('email','Enter a Correct Email').isEmail(),
   body('password','Password cnt blank').exists(),
 ],async (req,res)=>{
-  console.log("hello...........");
   let sucess=false;
   //check for possible errors 
    const errors = validationResult(req);
@@ -63,7 +63,6 @@ router.post('/login',[
   const {email,password}=req.body;
   try{
   let user=await User.findOne({email});
-  console.log(email);
   if(!user){
     return res.status(400).send("please try to login with correct credentials...");
   }

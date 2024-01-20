@@ -45,46 +45,6 @@ router.post('/addnote', fetchuser, [
       }
   })
 
-  // 2: Add a new Note , Login required
-router.post('/addmark', fetchuser, [
-  body('title', 'Enter a valid title').isLength({ min: 3 }),
-  body('description', 'Description must be atleast 5 characters').isLength({ min: 3 }),], async (req, res) => {
-      try {
-        // using destructing method of javascript for send the requested data to corresponding fields
-          const { coordinate,title, description,image } = req.body;
-          // If there are errors, return Bad request and the errors
-          const errors = validationResult(req);
-          if (!errors.isEmpty()) {
-              return res.status(400).json({ errors: errors.array() });
-          }
-          //created a new note with "new" keyword
-          //new note object  contain title...
-          const note = new Card({
-            coordinate,title, description,image, user: req.user.id
-          })
-          //saving the notes 
-          const savedNote = await note.save()
-          // return the notes as the response
-          res.json(savedNote);
-
-      } catch (error) {
-          console.error(error.message);
-          res.status(500).send("Internal Server Error");
-      }
-  })
-
-//fetch all marker data 
-router.get('/fetchallmarkers', fetchuser,  async (req, res) => {
-  try {
-    console.log(req.user);
-    const notes = await Card.find({id : req.user.id});
-    res.json(notes);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
-
   //  3: Update . Login required
 router.put('/updatenote/:id', fetchuser, async (req, res) => {
   //The PUT method is used to modify a single resource. The POST method is used to add a child resource
@@ -117,40 +77,6 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
   }
 })
 
-// router.post('/upload-image', upload.single('myfile'), fetchuser,async (req, res) => {
-  
-//   const {originalname,mimetype,path}=req.file;
-
-//     const inl=new Model({
-//       user:req.user.id,
-//         name:originalname,
-//         image:{
-//             data:null,
-//             contentType:'image/png'
-//         }
-//     })
-//     const image = await inl.save();
-// //djbvsbhb
-//     const buffer = fs.readFileSync(path); // Read the file from the file system
-
-//     image.img.data = buffer; // Assign the buffer to the img.data property
-
-//     const savedImage = await image.save();
-// //     console.log(req.body.imt);
-// //     console.log("....");
-// //     console.log(req.file.originalname);
-// //    let data=new Model();
-// //    data.name=req.file.originalname;
-// //    fs.writeFileSync(req.file.originalname,req.file.filename);
-// //    data.img.data=fs.readFileSync(path.join("D:/mini-pro/main-page/ehr-project using mern/" + req.file.originalname));
-// //    data.img.contentType='image/png';
-// //    const savedNote=await data.save();
-// //    console.log(savedNote);
-// //    res.json(savedNote);
-   
-//     });
-
-
 // ROUTE 4: Delete . Login required
 router.delete('/deletenote/:id', fetchuser, async (req, res) => {
   try {
@@ -170,6 +96,47 @@ router.delete('/deletenote/:id', fetchuser, async (req, res) => {
       res.status(500).send("Internal Server Error");
   }
 })
+
+//markers notes
+
+router.post('/addmark', fetchuser, async (req, res) => {
+      try {
+        // using destructing method of javascript for send the requested data to corresponding fields
+        // console.log(req.body);
+          const { coordinate,title, description,typeofproblem,image } = req.body;
+          // If there are errors, return Bad request and the errors
+          const errors = validationResult(req);
+          if (!errors.isEmpty()) {
+              return res.status(400).json({ errors: errors.array() });
+          }
+          //created a new note with "new" keyword
+          //new note object  contain title...
+          const note = new Card({
+            coordinate,title, description,typeofproblem,image, user: req.user.id
+          })
+          //saving the notes 
+          const savedNote = await note.save()
+          // return the notes as the response
+          res.json(savedNote);
+
+      } catch (error) {
+          console.error(error.message);
+          res.status(500).send("Internal Server Error");
+      }
+  })
+
+//fetch all marker data 
+router.get('/fetchallmarkers', fetchuser,  async (req, res) => {
+  try {
+    console.log(req.user);
+    const notes = await Card.find({id : req.user.id});
+    res.json(notes);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 
 
   module.exports=router;

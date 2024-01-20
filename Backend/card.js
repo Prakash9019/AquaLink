@@ -24,8 +24,12 @@ const userSchema= new Schema({
         required:true,
         min:2,
     },
+    typeofproblem:{
+        type: String,
+        required: true, 
+    },
     image:{
-        type:Buffer,
+        type:String,
         default:""
     },
     rating:{
