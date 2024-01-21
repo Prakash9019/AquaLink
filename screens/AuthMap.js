@@ -18,7 +18,7 @@ const CARD_HEIGHT = 220;
 const CARD_WIDTH = width * 0.8;
 const SPACING_FOR_CARD_INSET = width * 0.1 - 10;
 
-const MapScreen = () => {
+const AuthMap = () => {
   const navigation = useNavigation();
  // const route = useRoute();
   const theme = useTheme();
@@ -49,17 +49,17 @@ const MapScreen = () => {
   //   const [type, setType] = useState(CameraType.back);
   //   const [camera, setCamera] = useState(null);
 
-  const handleMapPress = async (event) => {
-   // setModalVisible(true);            //   check this out
-    setSelectedMarker(null);
-    setTitle('');
-    settypeofproblem('');
-    setDescription('');
-    setImageUri('');
-    setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
+//   const handleMapPress = async (event) => {
+//    // setModalVisible(true);            //   check this out
+//     setSelectedMarker(null);
+//     setTitle('');
+//     settypeofproblem('');
+//     setDescription('');
+//     setImageUri('');
+//     setmark([...mark, { coordinate: event.nativeEvent.coordinate }]);
 
     
-  };
+//   };
 
   const handleMarkerPress = (marker) => {
     setModalVisible(true);
@@ -96,19 +96,6 @@ const MapScreen = () => {
     fetchData();
   }, []);
 
-const handleCameraComplete = (image) => {
-  console.log("........................................................................................");
-  console.log(modalVisible);
-  setImageUri(image);
-  console.log(modalVisible)
-};
-
-const handleImage = () => {
-    navigation.navigate('CameraComponent',{
-      onComplete: setImageUri
-    });
-};
-
 // const handleImage = () => {
 //   navigation.navigate('CameraComponent', {
 //     onComplete: (image) => {
@@ -123,68 +110,7 @@ const handleImage = () => {
 // };
 
   
-  const handleSave = async () => {
-    console.log("clicked save");
-   // console.log(image);
-    console.log(selectedMarker);
-    if (selectedMarker) {
-      console.log("Title111"+title+description,imageUri);
-      // Update existing marker
-      const updatedmark = mark.map((marker) =>
-        marker === selectedMarker
-          ? { ...marker, title, description,typeofproblem,imageUri }     //the image is stored in setImmage use it tomorrow..
-          : marker
-      );
-      // updatedmark.map((m)=>{
-      //   console.log(m);
-      // })
-      console.log(updatedmark[0].typeofproblem);
-      // try {
-      //   const response = await axios.post('https://notes-application-api-pi.vercel.app/api/notes/addmark', {
-      //       coordinate:updatedmark.coordinate,
-      //       description:updatedmark.description,
-      //       title:updatedmark.title,
-      //       image:updatedmark.imageUri,
-      //   },{headers: {
-      //     'Content-Type': 'application/json',
-      //     "jwtData": await AsyncStorage.getItem('jwtData')
-         
-      // }});
-      // console.log(".....................")
-      // console.log(response);
-      const response = await fetch('https://notes-application-api-pi.vercel.app/api/notes/addmark',{
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "jwtData": await AsyncStorage.getItem('jwtData')
-        },
-        body: JSON.stringify({
-                coordinate:updatedmark[0].coordinate,
-                description:updatedmark[0].description,
-                title:updatedmark[0].title,
-                typeofproblem:updatedmark[0].typeofproblem,
-                image:updatedmark[0].imageUri,
-                
-            })
-      }); 
-      const hello = await response.json();
-       // const json = response.data;
-      console.log(hello);
-    
-      
-        // Navigate to the next screen or perform other actions
-      // } catch (error) {
-      //   console.error('Error during login:', error.message);
-      // }
-      // setmark(updatedmark);
-    } else {
-      // Add new marker
-      console.log("Title"+title);
-      setmark([...mark, { coordinate: selectedMarker.coordinate, title, description,typeofproblem,imageUri }]);
-    }
-    setModalVisible(false);
-    
-  };
+ 
    
   let mapIndex = 0;
   let mapAnimation = new Animated.Value(0);
@@ -219,16 +145,6 @@ const handleImage = () => {
   // });
 
 
-  const onMarkerPress = (mapEventData) => {
-    const markerID = mapEventData._targetInst.return.key;
-
-    let x = (markerID * CARD_WIDTH) + (markerID * 20); 
-    if (Platform.OS === 'ios') {
-      x = x - SPACING_FOR_CARD_INSET;
-    }
-
-    _scrollView.current.scrollTo({x: x, y: 0, animated: true});
-  }
 
   const _map = React.useRef(null);
   const _scrollView = React.useRef(null);
@@ -240,52 +156,11 @@ const handleImage = () => {
         initialRegion={state.region}
         style={styles.container}
         provider={PROVIDER_GOOGLE}
-        onPress={handleMapPress}
+  
         customMapStyle={theme.dark ? mapDarkStyle : mapStandardStyle}
       >
-        {/* the marker from the database or by image */}
-        {state.markers.map((marker, index) => {
-          const scaleStyle = {
-            transform: [
-              {
-                scale: 1,
-              },
-            ],
-          };
-          return (
-            <Marker key={index} coordinate={marker.coordinate} onPress={(e)=>onMarkerPress(e)}>
-              <Animated.View style={[styles.markerWrap]}>
-                <Animated.Image
-                  source={require('../components/map_marker.png')}
-                  style={[styles.marker, scaleStyle]}
-                  resizeMode="cover"
-                />
-              </Animated.View>
-            </Marker>
-          );
-        })}
+        
         {/* 'this marker from onclick event' */}
-        {mark.map((marker, index) => (
-        //  console.log(marker.coordinate),
-        
-          <Marker
-            key={index}
-            coordinate={marker.coordinate}
-            title={marker.title}
-            description={marker.description}
-            image={marker.image}
-            onPress={() => handleMarkerPress(marker)}
-          >
-             <Animated.View style={[styles.markerWrap]}>
-                <Animated.Image
-                  source={require('../components/map_marker.png')}
-                  style={styles.marker}
-                  resizeMode="cover"
-                />
-              </Animated.View>
-              </Marker>
-        ))}
-        
         
            { data ? data.map((marker, index) => (
             //  console.log(marker.coordinate),
@@ -299,7 +174,7 @@ const handleImage = () => {
               >
                  <Animated.View style={[styles.markerWrap]}>
                     <Animated.Image
-                      source={require('../components/map_marker.png')}
+                      source={require('./img2.png')}
                       style={styles.marker}
                       resizeMode="cover"
                     />
@@ -310,7 +185,9 @@ const handleImage = () => {
         {/* {data? data.map((item)=>{console.log(item)})
         : data} */}
       </MapView>
+      
 
+  
       <Dialog.Container visible={modalVisible}>
         <Text>Title:</Text>
         <Dialog.Input
@@ -336,20 +213,22 @@ const handleImage = () => {
               source={{ uri: imageUri }}
               style={{ width: 200, height: 200 }}
             /> : (
-              <TouchableOpacity onPress={handleImage} style={{ marginTop: 20 }} >
+             
               <Text style={{ color: 'blue', textDecorationLine: 'underline' }} >
-                Select Image
+                No Select Image
               </Text>
-            </TouchableOpacity>
       )}
 
      
     </View>
     
 
-        <Dialog.Button label="Save" onPress={handleSave} />
+        <Dialog.Button label="Save" />
         <Dialog.Button label="Cancel" onPress={() => setModalVisible(false)} />
       </Dialog.Container>
+      
+
+     
 
 
                   {/* <KeyboardAvoidingView behavior="padding" style={styles.container}>
@@ -396,27 +275,14 @@ const handleImage = () => {
           {useNativeDriver: true}
         )}
       >
-        {state.markers.map((marker, index) =>(
-          <View style={styles.card} key={index}>
-            <Image 
-              source={marker.image}
-              style={styles.cardImage}
-              resizeMode="cover"
-            />
-            <View style={styles.textContent}>
-              <Text numberOfLines={1} style={styles.cardtitle}>{marker.title}</Text>
-              <Text numberOfLines={1} style={styles.cardDescription}>{marker.description}</Text>
-              
-            </View>
-          </View>
-        ))}
+       
       </Animated.ScrollView>
       
     </View>
   );
 };
 
-export default memo(MapScreen);
+export default memo(AuthMap);
 
 const styles = StyleSheet.create({
   buttonClose: {

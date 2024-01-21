@@ -9,8 +9,8 @@ export var markers = [
         latitude: 22.6293867,
         longitude: 88.4354486,
       },
-      title: "Amazing Food Place",
-      description: "This is the best food place",
+      title: "Drinking Water in Rural India: A Perennial Crisis",
+      description: "Shortage of adequate water in rural India is a perennial problem. As per latest data, almost one fifth of rural habitations did not get the minimum entitled quantity of water (40 litres per capita per day or two buckets  a day).",
       image: Images[0].image,
       rating: 4,
       reviews: 99,
@@ -20,8 +20,8 @@ export var markers = [
         latitude: 22.6345648,
         longitude: 88.4377279,
       },
-      title: "Second Amazing Food Place",
-      description: "This is the second best food place",
+      title: "Road and transport issues",
+      description: "Shortage of adequate water in rural India is a perennial problem. As per latest data, almost one fifth of rural habitations did not get the minimum entitled quantity of water (40 litres per capita per day or two buckets  a day).",
       image: Images[1].image,
       rating: 5,
       reviews: 102,
@@ -31,23 +31,13 @@ export var markers = [
         latitude: 22.6281662,
         longitude: 88.4410113,
       },
-      title: "Third Amazing Food Place",
-      description: "This is the third best food place",
+      title: "Water pipe issue",
+      description: "Shortage of adequate water in rural India is a perennial problem. As per latest data, almost one fifth of rural habitations did not get the minimum entitled quantity of water (40 litres per capita per day or two buckets  a day).",
       image: Images[1].image,
       rating: 3,
       reviews: 220,
     },
-    {
-      coordinate: {
-        latitude: 22.6341137,
-        longitude: 88.4497463,
-      },
-      title: "Fourth Amazing Food Place",
-      description: "This is the fourth best food place",
-      image: Images[0].image,
-      rating: 4,
-      reviews: 48,
-    },
+
 ];
 
 export const mapDarkStyle = [

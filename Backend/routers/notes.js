@@ -5,6 +5,16 @@ const Note=require('../note.js');
 const Card=require("../card.js");
 const { body, validationResult } = require('express-validator');
 const { findByIdAndUpdate } = require('../note.js');
+const { MongoClient } = require('mongodb');
+
+
+
+// Database and Collection names
+// const dbName = 'your-database';
+// const collectionName = 'your-collection';
+
+// TTL value in seconds (30 days)
+const ttlSeconds = 30 * 24 * 60 * 60;
 
 router.get('/fetchall', fetchuser,  async (req, res) => {
     try {
@@ -77,7 +87,7 @@ router.put('/updatenote/:id', fetchuser, async (req, res) => {
   }
 })
 
-// ROUTE 4: Delete . Login required
+// ROUTE 4: Delete . Login requireda
 router.delete('/deletenote/:id', fetchuser, async (req, res) => {
   try {
       // Find the note to be delete and delete it
@@ -111,8 +121,9 @@ router.post('/addmark', fetchuser, async (req, res) => {
           }
           //created a new note with "new" keyword
           //new note object  contain title...
+          await Card.createIndex({ createdAt: 1 }, { expireAfterSeconds: ttlSeconds });
           const note = new Card({
-            coordinate,title, description,typeofproblem,image, user: req.user.id
+            coordinate,title, description,typeofproblem,image, createdAt: new Date(), user: req.user.id
           })
           //saving the notes 
           const savedNote = await note.save()

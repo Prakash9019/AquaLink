@@ -36,7 +36,6 @@ const SignIn = () => {
     const handleSubmit1 = async (e) => {
         e.preventDefault();
         try {
-            
             console.log(data);
             const response = await axios.post('https://notes-application-api-pi.vercel.app/api/auth/user', {
                 username:data.username,
@@ -48,7 +47,6 @@ const SignIn = () => {
             console.log(json);
             // Save the token to AsyncStorage
             await AsyncStorage.setItem('jwtData', json.jwtData);
-      
             // Navigate to the next screen or perform other actions
             console.log('Token saved:', json.jwtData);
             navigation.navigate("MapScreen");
@@ -111,7 +109,7 @@ const SignIn = () => {
 
     return (
       <View style={styles.container}>
-          <StatusBar backgroundColor='#FF6347' barStyle="light-content"/>
+          <StatusBar backgroundColor='#7071E8' barStyle="light-content"/>
         <View style={styles.header}>
             <Text style={styles.text_header}>Register Now!</Text>
         </View>
@@ -120,7 +118,8 @@ const SignIn = () => {
             style={styles.footer}
         >
             <ScrollView>
-            <Text style={styles.text_footer}>Username</Text>
+            <Text style={styles.text_footer}>Username
+            </Text>
             <View style={styles.action}>
                 <FontAwesome 
                     name="user-o"
@@ -132,6 +131,7 @@ const SignIn = () => {
                     style={styles.textInput}
                     autoCapitalize="none"
                     onChangeText={(val) => textInputChange(val)}
+                   
                 />
                 {data.check_textInputChange ? 
                 <Animatable.View
@@ -143,10 +143,13 @@ const SignIn = () => {
                         size={20}
                     />
                 </Animatable.View>
+                
                 : null}
+                
             </View>
 
-            <Text style={styles.text_footer}>Email</Text>
+            <Text style={styles.text_footer}>Email
+            </Text>
             <View style={styles.action}>
                 <FontAwesome 
                     name="user-o"
@@ -255,7 +258,7 @@ const SignIn = () => {
                     onPress={handleSubmit1}
                 >
                 <TouchableOpacity
-                    colors={['#FFA07A', '#FF6347']}
+                    colors={['#7071E8', '#7071E8']}
                     style={styles.signIn}
                 >
                     <Text style={[styles.textSign, {
@@ -267,13 +270,13 @@ const SignIn = () => {
                 <TouchableOpacity
                     onPress={handleSubmit1}
                     style={[styles.signIn, {
-                        borderColor: '#FF6347',
+                        borderColor: '#7071E8',
                         borderWidth: 1,
                         marginTop: 15
                     }]}
                 >
                     <Text style={[styles.textSign, {
-                        color: '#FF6347'
+                        color: '#7071E8'
                     }]}>Sign In</Text>
                 </TouchableOpacity>
             </View>
@@ -288,7 +291,7 @@ export default SignIn;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#FF6347'
+      backgroundColor: '#7071E8'
     },
     header: {
         flex: 1,
@@ -328,7 +331,7 @@ const styles = StyleSheet.create({
     },
     button: {
         alignItems: 'center',
-        marginTop: 50
+        marginTop: 10
     },
     signIn: {
         width: '100%',

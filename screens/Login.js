@@ -157,9 +157,9 @@ const Signup = () => {
 
     return (
       <View style={styles.container}>
-          <StatusBar backgroundColor='#FF6347' barStyle="light-content"/>
-        <View style={styles.header}>
-            <Text style={styles.text_header}>Welcome!</Text>
+          <StatusBar backgroundColor='#7071E8' barStyle="light-content"/>
+          <View style={styles.header}>
+            <Text style={styles.text_header}>Login Now!</Text>
         </View>
         <Animatable.View 
             animation="fadeInUpBig"
@@ -251,7 +251,7 @@ const Signup = () => {
             
 
             <TouchableOpacity>
-                <Text style={{color: '#FF6347', marginTop:15}}>Forgot password?</Text>
+                <Text style={{color: '#7071E8', marginTop:15}}>Forgot password?</Text>
             </TouchableOpacity>
             <View style={styles.button}>
                 <TouchableOpacity
@@ -264,15 +264,17 @@ const Signup = () => {
                 <TouchableOpacity
                     onPress={handleSubmit}
                     style={[styles.signIn, {
-                        borderColor: '#FF6347',
+                        borderColor: '#7071E8',
                         borderWidth: 1,
                         marginTop: 15
                     }]}
                 >
                     <Text style={[styles.textSign, {
-                        color: '#FF6347'
+                        color: '#7071E8'
                     }]}>Sign Up</Text>
                 </TouchableOpacity>
+                <Text>Don't have account</Text>
+                <TouchableOpacity onPress={()=>{navigation.navigate('SignIn')}}><Text>SignUp</Text></TouchableOpacity>
             </View>
         </Animatable.View>
       </View>
@@ -284,7 +286,7 @@ export default Signup;
 const styles = StyleSheet.create({
     container: {
       flex: 1, 
-      backgroundColor: '#FF6347'
+      backgroundColor: '#7071E8'
     },
     header: {
         flex: 1,
@@ -294,7 +296,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         flex: 3,
-        backgroundColor: '#fff',
+        backgroundColor: '#7071E8',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 20,

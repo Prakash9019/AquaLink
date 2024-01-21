@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Card = () => {
   const [data,setData]=useState([]);
+  const [filter,setFilter]=useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -18,9 +19,15 @@ const Card = () => {
         // const d=AsyncStorage.getItem('jwtData')
         // console.log(d);
         const hello = await response.json();
-        console.log("....................");
        console.log(hello);
        console.log("....................");
+      //  hello.map((item)=>{
+      //       if(item.typeofproblem=="water"){
+      //           setFilter.push(item);
+      
+      //       }
+      //  })
+       console.log(filter);
         setData(hello);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -37,7 +44,7 @@ const Card = () => {
         keyExtractor={({ id }, index) => index}
         renderItem={({ item }) => (
            <View style={styles.card}>
-            <Image source={{uri:item.image}} style={styles.image} />
+            <Image source={{uri :item.image}} style={styles.image} />
             <View style={styles.content}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.description}>{item.description}</Text>

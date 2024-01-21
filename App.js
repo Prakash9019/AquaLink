@@ -19,7 +19,9 @@ import Drawer from "./screens/Drawer";
 import CameraComponent from './screens/Camera';
 import MapScreen from './screens/MapScreen';
 import Footer from './screens/Footer';
-
+import adminuser from './screens/adminuser';
+import AuthFooter from './screens/AuthFooter';
+import AuthMap from './screens/AuthMap';
 const Stack = createStackNavigator();
 
 const App = () => (
@@ -35,9 +37,23 @@ const App = () => (
         headerShown: false,
       }}
     />
+     <Stack.Screen
+      name="adminuser"
+      component={adminuser}
+      options={{
+        headerShown: false,
+      }}
+    />
     <Stack.Screen
-      name="SignIn"
-      component={SignIn}
+      name="AuthFooter"
+      component={AuthFooter}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="AuthMap"
+      component={AuthMap}
       options={{
         headerShown: false,
       }}
@@ -45,6 +61,13 @@ const App = () => (
     <Stack.Screen
       name="Signup"
       component={Signup}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <Stack.Screen
+      name="SignIn"
+      component={SignIn}
       options={{
         headerShown: false,
       }}
